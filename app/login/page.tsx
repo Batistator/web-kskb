@@ -1,31 +1,64 @@
-"use client"
+'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/legacy/image'
 import { useRouter } from 'next/navigation';
-import { fakeLogin } from './authService'; // Importa la función simulada
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null); // Estado para manejar errores
-  const router = useRouter(); // Hook para la navegación en Next.js 13 App Router
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault(); // Evita la recarga de la página al enviar el formulario
-    setError(null); // Limpia errores previos al intentar un nuevo login
+    event.preventDefault();
+    setError(null);
 
-    const result = await fakeLogin(username, password); // Llama a la función de login simulada
+    // **1. Replace fakeLogin with a real API call to your backend login endpoint**
+    const backendLoginEndpoint = 'http://localhost:8080/api/auth/login'; // **REPLACE THIS WITH YOUR ACTUAL BACKEND LOGIN URL**
 
-    if (result.token) {
-      // Login exitoso: guarda el token (por ahora en localStorage, ¡considera opciones más seguras para producción!)
-      localStorage.setItem('awj_token', result.token);
-      // Redirige a la página de placeholder (por ejemplo, '/dashboard')
-      router.push('/dashboard'); // ¡Aún no hemos creado la página '/dashboard'! La crearemos en el siguiente paso.
-    } else if (result.error) {
-      // Login fallido: muestra el error
-      setError(result.error);
+    try {
+      const response = await fetch(backendLoginEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }), // Send username and password in the request body
+      });
+
+      if (response.ok) {
+        // **2. Successful login (2xx status code)**
+        // The backend should now set the 'awj_token' cookie in the HTTP response.
+        // We don't need to explicitly store it in localStorage anymore.
+        // The browser will automatically handle the cookie.
+
+        // Redirect to the dashboard
+        router.push('/dashboard');
+      } else {
+        // **3. Login failed (non-2xx status code)**
+        // Handle different error scenarios based on the response status code or body
+        let errorMessage = 'Error al iniciar sesión'; // Default error message
+
+        try {
+          const errorData = await response.json(); // Try to parse error response body as JSON
+          if (errorData && errorData.message) {
+            errorMessage = errorData.message; // Use error message from backend if available
+          }
+        } catch (jsonError) {
+          console.error('Error parsing error JSON response:', jsonError);
+          // If JSON parsing fails, use the default error message or handle it as needed
+        }
+
+        setError(errorMessage);
+      }
+
+    } catch (apiError) {
+      // **4. Error during API call (e.g., network error)**
+      console.error('Error calling login API:', apiError);
+      setError('Error de comunicación con el servidor'); // Generic error message for API call failures
     }
   };
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Imagen a la izquierda */}
@@ -41,11 +74,11 @@ export default function LoginPage() {
       <div className="flex w-full lg:w-1/2 justify-center items-center px-6 lg:px-8">
         <div className="w-full max-w-md">
           <div>
-            <Image priority src="/logo-kskb.png" alt="Picture of the author" width={500} height={200}/> 
+            <Image priority src="/logo-kskb.png" alt="Logo Kasukabe Squad" width={500} height={200}/>
           </div>
 
           <div className="mt-7">
-            <form className="space-y-6" onSubmit={handleSubmit}> {/* Añade onSubmit={handleSubmit} al formulario */}
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                   Nombre de usuario
@@ -58,8 +91,8 @@ export default function LoginPage() {
                     required
                     className="appearance-none block w-full px-3 py-2 border text-gray-700 border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Tu nombre de usuario"
-                    value={username} // Vincula el valor del input al estado username
-                    onChange={(e) => setUsername(e.target.value)} // Actualiza el estado username al cambiar el input
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
               </div>
@@ -76,20 +109,20 @@ export default function LoginPage() {
                     required
                     className="appearance-none block w-full px-3 text-gray-700 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Tu contraseña"
-                    value={password} // Vincula el valor del input al estado password
-                    onChange={(e) => setPassword(e.target.value)} // Actualiza el estado password al cambiar el input
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
                 {/* Checkbox "Recuérdame" (opcional) */}
-                <div className="flex items-center">
+                {/*<div className="flex items-center">
                   <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
                   <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                     Recuérdame
                   </label>
-                </div>
+                </div>*/}
 
                 <div className="text-sm">
                   {/* Link "¿Olvidaste tu contraseña?" (opcional) */}
@@ -108,7 +141,7 @@ export default function LoginPage() {
                 </button>
               </div>
             </form>
-            {error && ( // Muestra el mensaje de error si existe
+            {error && (
               <div className="mt-4 text-red-500 text-sm">
                 {error}
               </div>
