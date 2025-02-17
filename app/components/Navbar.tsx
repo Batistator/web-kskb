@@ -7,7 +7,7 @@ export default function Navbar() {
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
-              <span className="font-bold text-white text-xl">Dashboard</span> {/* Título del Dashboard */}
+              <span className="font-bold text-white text-xl">Kasukabe Squad</span> {/* Título del Dashboard */}
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
@@ -24,11 +24,12 @@ export default function Navbar() {
                     </svg>
                   </button>
                   {/* Dropdown oculto por defecto */}
-                  <div className="absolute hidden group-hover:block mt-2 w-48 rounded-md shadow-lg bg-white z-10">
+                  <div className="absolute hidden group-hover:block w-48 rounded-md shadow-lg bg-white z-10">
                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-button">
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Subopción 1</a>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Subopción 2</a>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Subopción 3</a>
+                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Datos totales</a>
+                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de partidas</a>
+                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de armas</a>
+                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Títulos</a>
                       {/* Añade aquí las subopciones de Estadísticas */}
                     </div>
                   </div>

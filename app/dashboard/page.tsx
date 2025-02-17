@@ -1,23 +1,37 @@
 'use client'; // Marca como Client Component para usar hooks
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import CountersSection from '../components/CountersSection'; // Importa CountersSection
 import PieChart from '../components/PieChart';
 import BarChart from '../components/BarChart';
-import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState<any | null>(null); // Estado para los datos del dashboard
   const [isLoading, setIsLoading] = useState(true); // Estado de carga
   const [error, setError] = useState<string | null>(null); // Estado de error
+  const router = useRouter();
 
   useEffect(() => {
+    if (typeof window !== "undefined") { // Seguridad para SSR/SSG
+      const token = localStorage.getItem("jwt_token");
+
+      if (!token) {
+        router.push('/login');
+      } else {
+        validateToken(token).then((validationResult) => {
+          if (!validationResult.isValid) {
+            router.push('/login');
+          }
+        });
+      }
+    }
+    
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
 
-      const token = localStorage.getItem('jwt_token') || Cookies.get('jwt_token_js'); // Obtiene el token de localStorage o de la cookie
+      const token = localStorage.getItem('jwt_token')
 
       console.log('Token:', token);
 
@@ -107,7 +121,7 @@ export default function DashboardPage() {
 
       <main className="bg-gray-100 py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-4">Resumen del Dashboard</h1>
+          <h1 className="text-2xl font-semibold text-gray-900 mb-4">Resumen de partidas</h1>
 
           <CountersSection
             totalVictorias={dashboardData.wins}
@@ -145,4 +159,28 @@ export default function DashboardPage() {
       </main>
     </div>
   );
+}
+
+// Función asíncrona para validar el token con el backend
+async function validateToken(token: string): Promise<{ isValid: boolean }> {
+
+  const backendValidationEndpoint = 'http://localhost:8080/api/validation/token';
+  try {
+    const response = await fetch(backendValidationEndpoint, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      return { isValid: true };
+    } else {
+      return { isValid: false };
+    }
+  } catch (error) {
+    console.error('Error al validar el token con el backend:', error);
+    return { isValid: false };
+  }
 }
