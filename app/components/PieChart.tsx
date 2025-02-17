@@ -46,6 +46,5 @@ export default function PieChart({ victorias, derrotas, empates }: PieChartProps
     },
   };
 
-
   return <div style={{ height: '300px' }}> <Pie data={data} options={options} /> </div>;
 }

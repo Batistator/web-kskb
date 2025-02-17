@@ -1,7 +1,8 @@
+'use client'; // Marca el componente como Client Component para usar hooks
+
 import React from 'react';
 
-// Define la interfaz para los datos de los contadores
-interface CounterData {
+interface CountersSectionProps {
   totalVictorias: number;
   totalDerrotas: number;
   totalEmpates: number;
@@ -18,62 +19,54 @@ interface CounterData {
   porcentajeNoShinchan: number;
 }
 
-// Datos dummy para simular la API
-const dummyCounterData: CounterData = {
-  totalVictorias: 150,
-  totalDerrotas: 75,
-  totalEmpates: 30,
-  mapaFavorable: 'Mapa A',
-  mapaDesfavorable: 'Mapa B',
-  mapaFavorito: 'Mapa C',
-  diasVictoriosos: 45,
-  diasEmpate: 10,
-  diasDerrotas: 20,
-  maximaRachaVictorias: 12,
-  maximaRachaDerrotas: 7,
-  rachaActualVictorias: 5,
-  partidasNoShinchanPrimero: 60,
-  porcentajeNoShinchan: 40,
-};
-
-export default function CountersSection() {
-  // En un caso real, aquí harías la llamada a la API y guardarías los datos en un estado.
-  // De momento, usaremos los datos dummy.
-  const counterData = dummyCounterData;
-
+const CountersSection: React.FC<CountersSectionProps> = ({
+  totalVictorias,
+  totalDerrotas,
+  totalEmpates,
+  mapaFavorable,
+  mapaDesfavorable,
+  mapaFavorito,
+  diasVictoriosos,
+  diasEmpate,
+  diasDerrotas,
+  maximaRachaVictorias,
+  maximaRachaDerrotas,
+  rachaActualVictorias,
+  partidasNoShinchanPrimero,
+  porcentajeNoShinchan,
+}) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-      {/* Contadores */}
-      <CounterCard title="Total Victorias" value={counterData.totalVictorias} />
-      <CounterCard title="Total Derrotas" value={counterData.totalDerrotas} />
-      <CounterCard title="Total Empates" value={counterData.totalEmpates} />
-      <CounterCard title="Mapa Favorable" value={counterData.mapaFavorable} />
-      <CounterCard title="Mapa Desfavorable" value={counterData.mapaDesfavorable} />
-      <CounterCard title="Mapa Favorito" value={counterData.mapaFavorito} />
-      <CounterCard title="Días Victoriosos" value={counterData.diasVictoriosos} />
-      <CounterCard title="Días de Empate" value={counterData.diasEmpate} />
-      <CounterCard title="Días de Derrotas" value={counterData.diasDerrotas} />
-      <CounterCard title="Máxima Racha de Victorias" value={counterData.maximaRachaVictorias} />
-      <CounterCard title="Máxima Racha de Derrotas" value={counterData.maximaRachaDerrotas} />
-      <CounterCard title="Racha Actual de Victorias" value={counterData.rachaActualVictorias} />
-      <CounterCard title="Partidas no Shinchan Primero" value={counterData.partidasNoShinchanPrimero} />
-      <CounterCard title="Porcentaje No Shinchan" value={`${counterData.porcentajeNoShinchan}%`} />
+      <CounterCard title="Total Victorias" value={totalVictorias} />
+      <CounterCard title="Total Derrotas" value={totalDerrotas} />
+      <CounterCard title="Total Empates" value={totalEmpates} />
+      <CounterCard title="Mapa Favorable" value={mapaFavorable} />
+      <CounterCard title="Mapa Desfavorable" value={mapaDesfavorable} />
+      <CounterCard title="Mapa Favorito" value={mapaFavorito} />
+      <CounterCard title="Días Victoriosos" value={diasVictoriosos} />
+      <CounterCard title="Días de Empate" value={diasEmpate} />
+      <CounterCard title="Días de Derrotas" value={diasDerrotas} />
+      <CounterCard title="Máxima Racha Victorias" value={maximaRachaVictorias} />
+      <CounterCard title="Máxima Racha Derrotas" value={maximaRachaDerrotas} />
+      <CounterCard title="Racha Actual Victorias" value={rachaActualVictorias} />
+      <CounterCard title="Partidas no Shinchan Primero" value={partidasNoShinchanPrimero} />
+      <CounterCard title="Porcentaje No Shinchan" value={`${porcentajeNoShinchan}%`} />
     </div>
   );
-}
-
+};
 
 interface CounterCardProps {
   title: string;
   value: string | number;
 }
 
-// Componente reutilizable para cada tarjeta de contador
-function CounterCard({ title, value }: CounterCardProps) {
+const CounterCard: React.FC<CounterCardProps> = ({ title, value }) => {
   return (
     <div className="bg-white shadow rounded-lg p-4 sm:p-6">
       <dt className="text-sm font-medium text-gray-500 truncate">{title}</dt>
       <dd className="mt-1 text-3xl font-semibold text-gray-900">{value}</dd>
     </div>
   );
-}
+};
+
+export default CountersSection;

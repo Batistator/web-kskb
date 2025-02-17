@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/legacy/image'
+import Image from 'next/legacy/image';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -14,8 +15,7 @@ export default function LoginPage() {
     event.preventDefault();
     setError(null);
 
-    // **1. Replace fakeLogin with a real API call to your backend login endpoint**
-    const backendLoginEndpoint = 'http://localhost:8080/api/auth/login'; // **REPLACE THIS WITH YOUR ACTUAL BACKEND LOGIN URL**
+    const backendLoginEndpoint = 'http://localhost:8080/api/auth/login';
 
     try {
       const response = await fetch(backendLoginEndpoint, {
@@ -23,58 +23,68 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }), // Send username and password in the request body
+        body: JSON.stringify({ username, password }),
+        credentials: 'include' // Importante: incluye las cookies en la petición
       });
 
       if (response.ok) {
-        // **2. Successful login (2xx status code)**
-        // The backend should now set the 'awj_token' cookie in the HTTP response.
-        // We don't need to explicitly store it in localStorage anymore.
-        // The browser will automatically handle the cookie.
-
-        // Redirect to the dashboard
-        router.push('/dashboard');
+        try {
+          const data = await response.json();
+          
+          // Guardar el token en localStorage o en una cookie no-HttpOnly para acceso JavaScript
+          if (data.token) {
+            // Opción 1: Usar localStorage (simple pero menos seguro contra XSS)
+            localStorage.setItem('jwt_token', data.token);
+            
+            // Opción 2: Usar js-cookie (mejor que localStorage pero aún vulnerable a XSS)
+            Cookies.set('jwt_token_js', data.token, { expires: 1 }); // Expira en 1 día
+            
+            console.log('Token guardado exitosamente');
+            
+            // Redirigir al dashboard
+          router.push('/dashboard');
+          } else {
+            setError('No se recibió el token en la respuesta');
+          }
+        } catch (parseError) {
+          console.error('Error parsing JSON response:', parseError);
+          setError('Error al procesar la respuesta del servidor');
+        }
       } else {
-        // **3. Login failed (non-2xx status code)**
-        // Handle different error scenarios based on the response status code or body
-        let errorMessage = 'Error al iniciar sesión'; // Default error message
+        let errorMessage = 'Error al iniciar sesión';
 
         try {
-          const errorData = await response.json(); // Try to parse error response body as JSON
-          if (errorData && errorData.message) {
-            errorMessage = errorData.message; // Use error message from backend if available
+          const errorData = await response.json();
+          if (errorData && errorData.error) {
+            errorMessage = errorData.error;
+          } else if (errorData && errorData.message) {
+            errorMessage = errorData.message;
           }
         } catch (jsonError) {
           console.error('Error parsing error JSON response:', jsonError);
-          // If JSON parsing fails, use the default error message or handle it as needed
         }
 
         setError(errorMessage);
       }
-
     } catch (apiError) {
-      // **4. Error during API call (e.g., network error)**
       console.error('Error calling login API:', apiError);
-      setError('Error de comunicación con el servidor'); // Generic error message for API call failures
+      setError('Error de comunicación con el servidor');
     }
   };
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Imagen a la izquierda */}
       <div className="hidden lg:flex lg:w-1/2 bg-cover bg-center" style={{ backgroundImage: `url('/background-login.png')` }}>
-        {/* Puedes poner un texto o logo superpuesto si quieres */}
         <div className="flex flex-col justify-center px-12 bg-opacity-50 bg-black">
           <h2 className="text-2xl font-bold text-white">Kasukabe Squad</h2>
           <p className="mt-2 text-gray-100">Nos gusta ir a dormir calentitos.</p>
         </div>
       </div>
 
-      {/* Formulario de Login a la derecha */}
       <div className="flex w-full lg:w-1/2 justify-center items-center px-6 lg:px-8">
         <div className="w-full max-w-md">
           <div>
-            <Image priority src="/logo-kskb.png" alt="Logo Kasukabe Squad" width={500} height={200}/>
+            <Image priority src="/logo-kskb.png" alt="Logo Kasukabe Squad" width={500} height={200} />
           </div>
 
           <div className="mt-7">
@@ -116,16 +126,7 @@ export default function LoginPage() {
               </div>
 
               <div className="flex items-center justify-between">
-                {/* Checkbox "Recuérdame" (opcional) */}
-                {/*<div className="flex items-center">
-                  <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                    Recuérdame
-                  </label>
-                </div>*/}
-
                 <div className="text-sm">
-                  {/* Link "¿Olvidaste tu contraseña?" (opcional) */}
                   <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
                     ¿Olvidaste tu contraseña?
                   </a>

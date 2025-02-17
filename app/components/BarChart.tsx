@@ -4,37 +4,35 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-
 interface BarChartProps {
   mapaData: {
-    mapa: string;
-    victorias: number;
-    derrotas: number;
-    empates: number;
-  }[]; // Array de objetos con datos por mapa
+    mapName: string; // Usa mapName para que coincida con el JSON del backend
+    wins: number;    // Usa wins, losses, ties para que coincida con el JSON
+    losses: number;
+    ties: number;
+  }[];
 }
 
-
 export default function BarChart({ mapaData }: BarChartProps) {
-  const labels = mapaData.map(data => data.mapa); // Etiquetas del eje X (nombres de mapas)
+  const labels = mapaData.map(data => data.mapName); // Usa mapName para el nombre del mapa
 
   const data = {
     labels,
     datasets: [
       {
         label: 'Victorias',
-        data: mapaData.map(data => data.victorias),
-        backgroundColor: 'rgba(54, 162, 54, 0.8)', // Verde para Victorias
+        data: mapaData.map(data => data.wins),    // Usa wins
+        backgroundColor: 'rgba(54, 162, 54, 0.8)',
       },
       {
         label: 'Derrotas',
-        data: mapaData.map(data => data.derrotas),
-        backgroundColor: 'rgba(255, 99, 132, 0.8)', // Rojo para Derrotas
+        data: mapaData.map(data => data.losses),   // Usa losses
+        backgroundColor: 'rgba(255, 99, 132, 0.8)',
       },
       {
         label: 'Empates',
-        data: mapaData.map(data => data.empates),
-        backgroundColor: 'rgba(255, 206, 86, 0.8)', // Amarillo para Empates
+        data: mapaData.map(data => data.ties),     // Usa ties
+        backgroundColor: 'rgba(255, 206, 86, 0.8)',
       },
     ],
   };
@@ -53,21 +51,20 @@ export default function BarChart({ mapaData }: BarChartProps) {
     },
     scales: {
       y: {
-        beginAtZero: true, // Eje Y empieza en 0
+        beginAtZero: true,
         title: {
           display: true,
-          text: 'Número de Partidas', // Título del eje Y
+          text: 'Número de Partidas',
         },
       },
       x: {
         title: {
           display: true,
-          text: 'Mapas', // Título del eje X
+          text: 'Mapas',
         },
       },
     },
   };
-
 
   return <div style={{ height: '400px' }}> <Bar data={data} options={options} /> </div>;
 }

@@ -35,7 +35,7 @@ async function validateToken(token: string): Promise<{ isValid: boolean }> {
   // Por ahora, vamos a simular una validación exitosa siempre para este ejemplo.
   // ¡REEMPLAZA ESTO CON LA LÓGICA REAL DE VALIDACIÓN DE TU BACKEND!
 
-  const backendValidationEndpoint = 'http://localhost:8080/api/auth/validate-token'; // Reemplaza con la URL real de tu backend
+  const backendValidationEndpoint = 'http://localhost:8080/api/validation/token'; // Reemplaza con la URL real de tu backend
   try {
     const response = await fetch(backendValidationEndpoint, {
       method: 'POST', // o GET, dependiendo de cómo esté diseñada tu API de validación

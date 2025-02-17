@@ -1,46 +1,144 @@
-"use client"
-import React from 'react';
-import Navbar from '../components/Navbar'; // Importa el Navbar
-import CountersSection from '../components/CountersSection'; // Importa la sección de Contadores
-import PieChart from '../components/PieChart'; // Importa el PieChart
-import BarChart from '../components/BarChart'; // Importa el BarChart
+'use client'; // Marca como Client Component para usar hooks
 
-// Datos dummy para el gráfico de tarta
-const dummyPieData = {
-  victorias: 150,
-  derrotas: 75,
-  empates: 30,
-};
-
-// Datos dummy para el gráfico de barras
-const dummyBarData = [
-  { mapa: 'Mapa A', victorias: 50, derrotas: 25, empates: 10 },
-  { mapa: 'Mapa B', victorias: 30, derrotas: 35, empates: 5 },
-  { mapa: 'Mapa C', victorias: 70, derrotas: 15, empates: 15 },
-  { mapa: 'Mapa D', victorias: 20, derrotas: 5, empates: 0 },
-];
-
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import CountersSection from '../components/CountersSection'; // Importa CountersSection
+import PieChart from '../components/PieChart';
+import BarChart from '../components/BarChart';
+import Cookies from 'js-cookie';
 
 export default function DashboardPage() {
+  const [dashboardData, setDashboardData] = useState<any | null>(null); // Estado para los datos del dashboard
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
+  const [error, setError] = useState<string | null>(null); // Estado de error
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem('jwt_token') || Cookies.get('jwt_token_js'); // Obtiene el token de localStorage o de la cookie
+
+      console.log('Token:', token);
+
+      if (!token) {
+        setError('No se encontró token de autenticación.');
+        setIsLoading(false);
+        return;
+      }
+
+      const startDate = '2020-01-01';
+      const endDate = '2040-01-01';
+      const apiUrl = `http://localhost:8080/api/dashboard/getDashboardData?startDate=${startDate}&endDate=${endDate}`;
+
+      try {
+        const response = await fetch(apiUrl, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          let errorMessage = `Error al obtener datos del dashboard. Status: ${response.status}`;
+          try {
+            const errorData = await response.json();
+            if (errorData && errorData.message) {
+              errorMessage += ` - ${errorData.message}`;
+            }
+          } catch (jsonError) {
+            console.error('Error parsing error JSON response:', jsonError);
+          }
+          throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        setDashboardData(data); // Guarda toda la respuesta en el estado
+        setIsLoading(false);
+
+      } catch (apiError: any) {
+        console.error('Error al hacer la petición a la API:', apiError);
+        setError('Error al cargar datos del dashboard. Por favor, intenta de nuevo más tarde.');
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  if (isLoading) {
+    return (
+      <div>
+        <Navbar />
+        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen"> {/* Centra el mensaje de carga */}
+          <p>Cargando datos del dashboard...</p>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <Navbar />
+        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen"> {/* Centra el mensaje de error */}
+          <p className="text-red-500">Error al cargar el dashboard: {error}</p>
+        </main>
+      </div>
+    );
+  }
+
+  if (!dashboardData) {
+    return (
+      <div>
+        <Navbar />
+        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen"> {/* Centra el mensaje de no datos */}
+          <p>No hay datos disponibles para el dashboard.</p>
+        </main>
+      </div>
+    );
+  }
+
+
   return (
     <div>
-      <Navbar /> {/* Renderiza el Navbar */}
+      <Navbar />
 
       <main className="bg-gray-100 py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-semibold text-gray-900 mb-4">Resumen del Dashboard</h1>
 
-          <CountersSection /> {/* Renderiza la sección de Contadores */}
+          <CountersSection
+            totalVictorias={dashboardData.wins}
+            totalDerrotas={dashboardData.losses}
+            totalEmpates={dashboardData.ties}
+            mapaFavorable={dashboardData.bestMap}
+            mapaDesfavorable={dashboardData.worstMap}
+            mapaFavorito={dashboardData.favouriteMap}
+            diasVictoriosos={dashboardData.allWinsDays}
+            diasEmpate={dashboardData.allTiesDays}
+            diasDerrotas={dashboardData.allLosesDays}
+            maximaRachaVictorias={dashboardData.maxWinStreak}
+            maximaRachaDerrotas={dashboardData.maxLoseStreak}
+            rachaActualVictorias={dashboardData.actualWinStreak}
+            partidasNoShinchanPrimero={dashboardData.noBestShinchanMatches}
+            porcentajeNoShinchan={dashboardData.noBestShinchanRate}
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-            {/* Gráfico de Tarta */}
+            {/* Gráfico de Tarta - Pasa los datos desde dashboardData */}
             <div className="bg-white shadow rounded-lg p-6">
-              <PieChart victorias={dummyPieData.victorias} derrotas={dummyPieData.derrotas} empates={dummyPieData.empates} />
+              <PieChart
+                victorias={dashboardData.wins}
+                derrotas={dashboardData.losses}
+                empates={dashboardData.ties}
+              />
             </div>
 
-            {/* Gráfico de Barras */}
+            {/* Gráfico de Barras - Pasa mapaData desde dashboardData */}
             <div className="bg-white shadow rounded-lg p-6">
-              <BarChart mapaData={dummyBarData} />
+              <BarChart mapaData={dashboardData.resultsPerMap} /> {/* Pasa resultsPerMap */}
             </div>
           </div>
         </div>
