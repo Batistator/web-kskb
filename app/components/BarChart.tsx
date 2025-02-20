@@ -14,7 +14,12 @@ interface BarChartProps {
 }
 
 export default function BarChart({ mapaData }: BarChartProps) {
-  const labels = mapaData.map(data => data.mapName); // Usa mapName para el nombre del mapa
+  const formatMapName = (mapName: string) => {
+    const modifiedName = mapName.slice(3); // Elimina los 3 primeros caracteres
+    return modifiedName.charAt(0).toUpperCase() + modifiedName.slice(1); // Pone el primer carácter en mayúscula
+  };
+  
+  const labels = mapaData.map(data => formatMapName(data.mapName)); // Usa mapName para el nombre del mapa
 
   const data = {
     labels,
