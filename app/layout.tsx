@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kskbos Webpage",
+  title: "La casa de la KSKB",
   description: "Para llevar la cuenta de los tiriteos nocturnos.",
 };
 
