@@ -47,7 +47,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
 
   const counterCardGroups: CounterCardGroupProps[] = [
     {
-      icon: "./icons/flag-checkered-solid.svg",
+      icon: "./icons/dashboard/flag-checkered-solid.svg",
       title: "Resumen de Partidas",
       subtitle:"Total: " + (totalVictorias + totalDerrotas + totalEmpates),
       value: [
@@ -57,7 +57,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
       ],
     },
     {
-      icon: "./icons/map-solid.svg",
+      icon: "./icons/dashboard/map-solid.svg",
       title: "Mapas",
       subtitle:"",
       value: [
@@ -67,7 +67,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
       ],
     },
     {
-      icon: "./icons/calendar-days-solid.svg",
+      icon: "./icons/dashboard/calendar-days-solid.svg",
       title: "Días",
       subtitle:"",
       value: [
@@ -77,7 +77,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
       ],
     },
     {
-      icon: "./icons/medal-solid.svg",
+      icon: "./icons/dashboard/medal-solid.svg",
       title: "Rachas",
       subtitle:"",
       value: [
@@ -87,7 +87,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
       ],
     },
     {
-      icon: "./icons/percent-solid.svg",
+      icon: "./icons/dashboard/percent-solid.svg",
       title: "Otros",
       subtitle:"",
       value: [

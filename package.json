@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroui/date-picker": "^2.3.10",
     "@heroui/react": "^2.6.14",
+    "@heroui/theme": "^2.4.9",
     "@react-stately/data": "^3.12.1",
     "chart.js": "^4.4.7",
     "framer-motion": "^12.4.3",
