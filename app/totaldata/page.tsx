@@ -100,35 +100,6 @@ export default function MatchListPage() {
       }
     };
 
-    const sortedItems = React.useMemo(() => {
-      let sorted = [...(matchListData || [])];
-
-      if (sortDescriptor.column && sortDescriptor.direction) {
-        const key = sortDescriptor.column;
-        const direction = sortDescriptor.direction;
-
-        sorted.sort((a: any, b: any) => {
-          let aValue = a[key];
-          let bValue = b[key];
-
-          if (typeof aValue === 'string') {
-            aValue = aValue.toLowerCase();
-            bValue = bValue.toLowerCase();
-          }
-
-          if (aValue < bValue) {
-            return direction === 'ascending' ? -1 : 1;
-          }
-          if (aValue > bValue) {
-            return direction === 'ascending' ? 1 : -1;
-          }
-          return 0;
-        });
-      }
-      return sorted;
-  }, [matchListData, sortDescriptor]);
-
-
     if (isLoading) {
       return (
         <div>
@@ -176,50 +147,48 @@ export default function MatchListPage() {
             />
           </div>
 
-          <Table
+            <Table
             isCompact
             isStriped
             aria-label="Datos totales"
-            sortDescriptor={sortDescriptor}
-            onSortChange={setSortDescriptor}
-          >
+            >
             <TableHeader>
-              <TableColumn key="data" allowsSorting>
-                Dato
+              <TableColumn key="icon">
+              Dato
               </TableColumn>
-              <TableColumn key="icon" allowsSorting>
-                <Image src="/path/to/image" alt="description" width={50} height={50} />
+              <TableColumn key="data">
+              &nbsp;
               </TableColumn>
-              <TableColumn key="shinchan" allowsSorting>
-                ShinChan
+              <TableColumn key="shinchan" style={{ backgroundColor: 'blue', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+              ShinChan
               </TableColumn>
-              <TableColumn key="kazama" allowsSorting>
-                Kazama
+              <TableColumn key="kazama">
+              Kazama
               </TableColumn>
-              <TableColumn key="nene" allowsSorting>
-                Nene
+              <TableColumn key="nene">
+              Nene
               </TableColumn>
-              <TableColumn key="swagchan" allowsSorting>
-                SwagChan
+              <TableColumn key="swagchan">
+              SwagChan
               </TableColumn>
-              <TableColumn key="mafios" allowsSorting>
-                The Mafios
+              <TableColumn key="mafios">
+              The Mafios
               </TableColumn>
             </TableHeader>
-            <TableBody items={sortedItems}>
-              {(item) => (
-                <TableRow key={getKeyValue(item, "data")}>
-                  <TableCell>{item.data}</TableCell>
-                  <TableCell>{item.icon}</TableCell>
-                  <TableCell>{item.shinchan}</TableCell>
-                  <TableCell>{item.kazama}</TableCell>
-                  <TableCell>{item.nene}</TableCell>
-                  <TableCell>{item.swagchan}</TableCell>
-                  <TableCell>{item.mafios}</TableCell>
-                </TableRow>
+            <TableBody items={matchListData}>
+              {(item: any) => (
+              <TableRow key={getKeyValue(item, "data")}>
+                <TableCell><Image src={item.icon || '/default-icon.png'} alt="icon" width={30} height={30} /></TableCell>
+                <TableCell>{item.data}</TableCell>
+                <TableCell style={{ background: 'linear-gradient(to right, transparent, light-blue, transparent)', borderRadius: '8px' }}>{item.shinchan}</TableCell>
+                <TableCell className="text-orange-600">{item.kazama}</TableCell>
+                <TableCell className="text-yellow-400">{item.nene}</TableCell>
+                <TableCell className="text-purple-500">{item.swagchan}</TableCell>
+                <TableCell className="text-green-500">{item.mafios}</TableCell>
+              </TableRow>
               )}
             </TableBody>
-          </Table>
+            </Table>
 
         </div>
       </main>
