@@ -20,7 +20,6 @@ import LoadingSpinner from '../components/Spinner';
 import { RangeValue } from "@heroui/react";
 import { DateValue, parseDate } from "@internationalized/date";
 
-// TODO: - Adaptar tamaños de columnas. Las de jugadores deben ser iguales, las de iconos y nombres deben ser fijas y más pequeñas
 // TODO: - Añadir sorted en las armas. Todas las columnas excepto icon
 // TODO: - Añadir Contadores de armas
 // TODO: - Cambiar funcionamiento date picker para que busque al pulsar siempre y busque al seleccionar del desplegable.
@@ -215,13 +214,17 @@ export default function WeaponsPage() {
             <TableBody items={weaponsData}>
               {(item: any) => (
                 <TableRow key={getKeyValue(item, "weapon")}>
-                  <TableCell style={{ width: '150px' }}><Image src={item.icon || '/default-icon.png'} alt="icon" width={150} height={30} /></TableCell>
-                  <TableCell>{item.weapon}</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.75) 50% 90%, rgba(104,163,229,0) 100%)', textAlign: 'right' }}>{item.shinchan}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.75) 50% 90%, rgba(237,163,56,0) 100%)', textAlign: 'right' }}>{item.kazama}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.75) 50% 90%, rgba(230,241,61,0) 100%)', textAlign: 'right' }}>{item.nene}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.75) 50% 90%, rgba(128,60,161,0) 100%)', textAlign: 'right' }}>{item.swagchan}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.75) 50% 90%, rgba(16,152,86,0) 100%)', textAlign: 'right' }}>{item.mafios}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ width: '150px', height: '30px' }}>
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Image src={item.icon || '/default-icon.png'} alt="icon" width={150} height={30} style={{ objectFit: 'contain', maxHeight: '30px' }} />
+                    </div>
+                    </TableCell>
+                    <TableCell style={{ maxWidth: '150px' }}>{item.weapon}</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.75) 50% 90%, rgba(104,163,229,0) 100%)', textAlign: 'right' }}>{item.shinchan}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.75) 50% 90%, rgba(237,163,56,0) 100%)', textAlign: 'right' }}>{item.kazama}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.75) 50% 90%, rgba(230,241,61,0) 100%)', textAlign: 'right' }}>{item.nene}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.75) 50% 90%, rgba(128,60,161,0) 100%)', textAlign: 'right' }}>{item.swagchan}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.75) 50% 90%, rgba(16,152,86,0) 100%)', textAlign: 'right' }}>{item.mafios}&nbsp;&nbsp;</TableCell>
                 </TableRow>
               )}
             </TableBody>
