@@ -30,10 +30,10 @@ export default function Navbar() {
                   {/* Dropdown oculto por defecto */}
                   <div className="absolute hidden group-hover:block w-48 rounded-md shadow-lg bg-white z-10">
                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-button">
-                    <a href="#" onClick={() => router.push('/dashboard')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Resumen de partidas</a>
+                      <a href="#" onClick={() => router.push('/dashboard')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Resumen de partidas</a>
                       <a href="#" onClick={() => router.push('/totaldata')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Estadísticas</a>
                       <a href="#" onClick={() => router.push('/matchList')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de partidas</a>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de armas</a>
+                      <a href="#" onClick={() => router.push('/weapons')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de armas</a>
                       <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Títulos</a>
                       {/* Añade aquí las subopciones de Estadísticas */}
                     </div>
