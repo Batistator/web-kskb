@@ -8,6 +8,9 @@ import BarChart from '../components/BarChart';
 import { useRouter } from 'next/navigation';
 import DateRangePicker from '../components/DateRangePicker';
 import moment from 'moment';
+import LoadingSpinner from '../components/Spinner';
+import { RangeValue } from "@heroui/react";
+import { DateValue, parseDate } from "@internationalized/date";
 
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState<any | null>(null);
@@ -64,10 +67,17 @@ export default function DashboardPage() {
     }
   };
 
+  const [value, setValue] = useState<RangeValue<DateValue>>({
+    start: startDate ? parseDate(startDate.format('YYYY-MM-DD')) : parseDate("2023-09-01"),
+    end: endDate ? parseDate(endDate.format('YYYY-MM-DD')) : parseDate("2099-01-01")
+  });
+
   useEffect(() => {
+    const storedValue = localStorage.getItem('dateRange');
+    
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("jwt_token");
-
+  
       if (!token) {
         router.push('/login');
       } else {
@@ -75,12 +85,32 @@ export default function DashboardPage() {
           if (!validationResult.isValid) {
             router.push('/login');
           } else {
-            fetchData('2020-01-01', '2040-01-01');
+            if (storedValue) {
+              console.log(storedValue);
+              const parsedValue = JSON.parse(storedValue);
+              setValue({
+                start: parseDate(parsedValue.start),
+                end: parseDate(parsedValue.end)
+              });
+              // Usar directamente los valores parseados
+              fetchData(parsedValue.start, parsedValue.end);
+            } else {
+              setValue({
+                start: startDate ? parseDate(startDate.format('YYYY-MM-DD')) : parseDate("2023-09-01"),
+                end: endDate ? parseDate(endDate.format('YYYY-MM-DD')) : parseDate("2099-01-01")
+              });
+              // Usar los valores por defecto
+              fetchData(
+                startDate ? startDate.format('YYYY-MM-DD') : "2023-09-01", 
+                endDate ? endDate.format('YYYY-MM-DD') : "2099-01-01"
+              );
+            }
           }
         });
       }
     }
-  }, []);
+  }, [startDate, endDate]);
+
 
   const handleDateRangeChange = (startDate: moment.Moment | null, endDate: moment.Moment | null) => {
     setStartDate(startDate);
@@ -95,7 +125,10 @@ export default function DashboardPage() {
       <div>
         <Navbar />
         <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
-          <p>Cargando datos del dashboard...</p>
+          <div className="flex flex-col items-center">
+            <LoadingSpinner />
+            <p className="mt-4">Cargando datos del dashboard...</p>
+          </div>
         </main>
       </div>
     );

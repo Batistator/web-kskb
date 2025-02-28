@@ -16,6 +16,9 @@ import {
   Spinner,
   SortDescriptor
 } from "@heroui/react";
+import LoadingSpinner from '../components/Spinner';
+import { DateValue, parseDate } from "@internationalized/date";
+import { RangeValue } from "@heroui/react";
 
 export default function MatchListPage() {
   const [matchListData, setMatchListData] = useState<any | null>(null);
@@ -79,23 +82,49 @@ export default function MatchListPage() {
       }
     };
 
-    useEffect(() => {
-      if (typeof window !== "undefined") {
-        const token = localStorage.getItem("jwt_token");
+    const [value, setValue] = useState<RangeValue<DateValue>>({
+      start: startDate ? parseDate(startDate.format('YYYY-MM-DD')) : parseDate("2023-09-01"),
+      end: endDate ? parseDate(endDate.format('YYYY-MM-DD')) : parseDate("2099-01-01")
+    });
 
-        if (!token) {
-          router.push('/login');
-        } else {
-          validateToken(token).then((validationResult) => {
-            if (!validationResult.isValid) {
-              router.push('/login');
-            } else {
-              fetchData('2020-01-01', '2040-01-01');
-            }
-          });
+    useEffect(() => {
+        const storedValue = localStorage.getItem('dateRange');
+        
+        if (typeof window !== "undefined") {
+          const token = localStorage.getItem("jwt_token");
+      
+          if (!token) {
+            router.push('/login');
+          } else {
+            validateToken(token).then((validationResult) => {
+              if (!validationResult.isValid) {
+                router.push('/login');
+              } else {
+                if (storedValue) {
+                  console.log(storedValue);
+                  const parsedValue = JSON.parse(storedValue);
+                  setValue({
+                    start: parseDate(parsedValue.start),
+                    end: parseDate(parsedValue.end)
+                  });
+                  // Usar directamente los valores parseados
+                  fetchData(parsedValue.start, parsedValue.end);
+                } else {
+                  setValue({
+                    start: startDate ? parseDate(startDate.format('YYYY-MM-DD')) : parseDate("2023-09-01"),
+                    end: endDate ? parseDate(endDate.format('YYYY-MM-DD')) : parseDate("2099-01-01")
+                  });
+                  // Usar los valores por defecto
+                  fetchData(
+                    startDate ? startDate.format('YYYY-MM-DD') : "2023-09-01", 
+                    endDate ? endDate.format('YYYY-MM-DD') : "2099-01-01"
+                  );
+                }
+              }
+            });
+          }
         }
-      }
-    }, []);
+      }, [startDate, endDate]);
 
     const handleDateRangeChange = (startDate: moment.Moment | null, endDate: moment.Moment | null) => {
       setStartDate(startDate);
@@ -139,11 +168,16 @@ export default function MatchListPage() {
         <div>
           <Navbar />
           <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
-            <p>Cargando datos de partidas...</p>
+            <div className="flex flex-col items-center">
+            <LoadingSpinner />
+            <p className="mt-4">Cargando datos de partidas...</p>
+            </div>
           </main>
         </div>
       );
     }
+
+    
 
     if (error) {
       return (
