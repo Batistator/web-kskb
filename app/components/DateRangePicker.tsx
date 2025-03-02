@@ -120,10 +120,6 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
   let formatter = useDateFormatter({ dateStyle: "full" });
 
   const handleChange = () => {
-    if (
-      initialValue.start?.toString() !== value.start?.toString() ||
-      initialValue.end?.toString() !== value.end?.toString()
-    ) {
       onDateRangeChange(
         value.start ? moment(value.start.toString()) : null,
         value.end ? moment(value.end.toString()) : null
@@ -136,7 +132,6 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
       
       // Actualizar el label cuando cambian las fechas
       updateRangeLabel(value.start, value.end);
-    }
   };
 
   const handleDateChange = (range: RangeValue<DateValue> | null) => {
@@ -198,7 +193,6 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
         label="Rango temporal"
         value={value}
         onChange={handleDateChange}
-        onOpenChange={handlePopClose}
         onFocus={handleFocus}
         onKeyUp={handleKeyUp}
       />

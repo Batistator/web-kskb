@@ -160,7 +160,7 @@ export default function MatchListPage() {
         });
       }
       return sorted;
-  }, [matchListData, sortDescriptor]);
+    }, [matchListData, sortDescriptor]);
 
 
     if (isLoading) {
