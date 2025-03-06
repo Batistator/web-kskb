@@ -34,7 +34,7 @@ export default function Navbar() {
                       <a href="#" onClick={() => router.push('/totaldata')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Estadísticas</a>
                       <a href="#" onClick={() => router.push('/matchList')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de partidas</a>
                       <a href="#" onClick={() => router.push('/weapons')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de armas</a>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Títulos</a>
+                      <a href="#" onClick={() => router.push('/titles')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Títulos</a>
                       {/* Añade aquí las subopciones de Estadísticas */}
                     </div>
                   </div>

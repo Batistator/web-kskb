@@ -101,7 +101,6 @@ export default function MatchListPage() {
                 router.push('/login');
               } else {
                 if (storedValue) {
-                  console.log(storedValue);
                   const parsedValue = JSON.parse(storedValue);
                   setValue({
                     start: parseDate(parsedValue.start),
@@ -176,8 +175,6 @@ export default function MatchListPage() {
         </div>
       );
     }
-
-    
 
     if (error) {
       return (

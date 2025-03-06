@@ -107,7 +107,6 @@ export default function WeaponsPage() {
             router.push('/login');
           } else {
             if (storedValue) {
-              console.log(storedValue);
               const parsedValue = JSON.parse(storedValue);
               setValue({
                 start: parseDate(parsedValue.start),
