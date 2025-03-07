@@ -61,7 +61,7 @@ export default function GameplaysPage() {
   // ID de la lista de reproducción (reemplaza con tu lista real)
   const playlistId = 'PLjrNMjANEPkMmLfwIn3c7YEjisD0NuKvs'; // Lista de reproducción KSKB
   // Clave API (deberías moverla a variables de entorno en producción)
-  const apiKey = 'AIzaSyC8_4KG468ikg0RihnI3mNZBvInNBcwG6s';//'YOUR_YOUTUBE_API_KEY';
+  const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;//'YOUR_YOUTUBE_API_KEY';
 
   useEffect(() => {
     const fetchYouTubeVideos = async () => {
