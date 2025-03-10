@@ -29,7 +29,7 @@ export default function HomePage() {
 // Función asíncrona para validar el token con el backend
 async function validateToken(token: string): Promise<{ isValid: boolean }> {
 
-  const backendValidationEndpoint = 'http://localhost:8080/api/validation/token';
+  const backendValidationEndpoint = `${process.env.NEXT_PUBLIC_API_HOST}api/validation/token`;
   try {
     const response = await fetch(backendValidationEndpoint, {
       method: 'POST',

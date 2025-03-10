@@ -77,7 +77,7 @@ export default function TitlesPage() {
       return;
     }
 
-    const apiUrl = `http://localhost:8080/api/titles/getAllTitles?startDate=${startDate}&endDate=${endDate}`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_HOST}api/titles/getAllTitles?startDate=${startDate}&endDate=${endDate}`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -267,7 +267,7 @@ export default function TitlesPage() {
 }
 
 async function validateToken(token: string): Promise<{ isValid: boolean }> {
-  const backendValidationEndpoint = 'http://localhost:8080/api/validation/token';
+  const backendValidationEndpoint = `${process.env.NEXT_PUBLIC_API_HOST}api/validation/token`;
   try {
     const response = await fetch(backendValidationEndpoint, {
       method: 'POST',
