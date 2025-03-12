@@ -17,7 +17,7 @@ export default function MemesGalleryPage() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await fetch('/api/kazames');
+        const response = await fetch('/frontApi/kazames');
         const data = await response.json();
         setImages(data);
       } catch (error) {
