@@ -11,6 +11,7 @@ interface YouTubeVideo {
   publishedAt: string;
   thumbnail: string;
   description: string;
+  comments: string[];
 }
 
 // Componente Modal para videos
@@ -64,50 +65,67 @@ export default function GameplaysPage() {
   const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;//'YOUR_YOUTUBE_API_KEY';
 
   useEffect(() => {
+    const fetchComments = async (videoId: string): Promise<string[]> => {
+      try {
+        const response = await fetch(
+          `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${apiKey}&maxResults=5`
+        );
+    
+        if (!response.ok) {
+          throw new Error('Error al obtener comentarios');
+        }
+    
+        const data = await response.json();
+        return data.items.map((item: any) => item.snippet.topLevelComment.snippet.textDisplay);
+      } catch (error) {
+        console.error(`Error al obtener comentarios para el video ${videoId}:`, error);
+        return [];
+      }
+    };
+    
     const fetchYouTubeVideos = async () => {
       setLoading(true);
       try {
         let allVideos: YouTubeVideo[] = [];
         let nextPageToken = '';
         let hasMorePages = true;
-        
-        // Hacer múltiples solicitudes hasta obtener todos los videos
+    
         while (hasMorePages) {
-          // Construir URL con token de página si existe
           const pageParam = nextPageToken ? `&pageToken=${nextPageToken}` : '';
           const response = await fetch(
             `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}${pageParam}`
           );
-          
+    
           if (!response.ok) {
             throw new Error('Error al obtener videos de YouTube');
           }
-          
+    
           const data = await response.json();
-          
-          // Procesar los videos de esta página
-          const videosData: YouTubeVideo[] = data.items.map((item: { snippet: { resourceId: { videoId: any; }; title: any; publishedAt: string | number | Date; thumbnails: { medium: { url: any; }; }; description: any; }; }) => ({
-            id: item.snippet.resourceId.videoId,
-            title: item.snippet.title,
-            publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString(),
-            thumbnail: item.snippet.thumbnails.medium.url || '/placeholder-image.jpg', // Imagen de respaldo
-            description: item.snippet.description
-          }));
-          
-          // Añadir videos al array acumulativo
+    
+          const videosData: YouTubeVideo[] = await Promise.all(
+            data.items.map(async (item: any) => {
+              const comments = await fetchComments(item.snippet.resourceId.videoId);
+              return {
+                id: item.snippet.resourceId.videoId,
+                title: item.snippet.title,
+                publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString(),
+                thumbnail: item.snippet.thumbnails.medium.url || '/placeholder-image.jpg',
+                description: item.snippet.description,
+                comments, // Añadir los comentarios al video
+              };
+            })
+          );
+    
           allVideos = [...allVideos, ...videosData];
-          
-          // Verificar si hay más páginas
           nextPageToken = data.nextPageToken;
           hasMorePages = !!nextPageToken;
         }
-        
-        console.log(`Total de videos recuperados: ${allVideos.length}`);
+    
         setVideos(allVideos);
         setFilteredVideos(allVideos);
       } catch (err) {
-        console.error("Error al cargar videos:", err);
-        setError("No se pudieron cargar los videos. Intenta más tarde.");
+        console.error('Error al cargar videos:', err);
+        setError('No se pudieron cargar los videos. Intenta más tarde.');
       } finally {
         setLoading(false);
       }
@@ -205,8 +223,17 @@ export default function GameplaysPage() {
               </div>
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-1 line-clamp-2">{video.title}</h3>
-                {/*<p className="text-sm text-gray-500">{video.publishedAt}</p>*/}
                 <p className="text-sm text-gray-500">{video.description}</p>
+                {video.comments.length > 0 && ( // Renderizar solo si hay comentarios
+                  <div className="mt-2">
+                    <h4 className="font-semibold text-sm text-gray-700">Comentarios:</h4>
+                    <ul className="text-sm text-gray-600 list-disc list-inside">
+                      {video.comments.map((comment, index) => (
+                        <li key={index} dangerouslySetInnerHTML={{ __html: comment }}></li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           ))}
