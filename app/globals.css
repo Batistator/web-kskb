@@ -2,16 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tema claro (por defecto) */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Tema oscuro */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {

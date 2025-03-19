@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 export default function Navbar() {
-
   const router = useRouter();
+  const { isDarkMode, toggleTheme } = useTheme(); // Usar el contexto del tema
+  const [isInitialized, setIsInitialized] = useState(false); // Estado para controlar la inicialización
+
+  useEffect(() => {
+    // Esperar a que el estado de isDarkMode se sincronice con localStorage
+    setIsInitialized(true);
+  }, []);
+
+  // No renderizar el botón hasta que el estado esté inicializado
+  if (!isInitialized) {
+    return null; // O un placeholder vacío si es necesario
+  }
 
   return (
-    <nav className="bg-gray-800">
+    <nav className={`${isDarkMode ? "bg-gray-900" : "bg-gray-800"}`}>
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start">
@@ -35,7 +47,6 @@ export default function Navbar() {
                       <a href="#" onClick={() => router.push('/matchList')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de partidas</a>
                       <a href="#" onClick={() => router.push('/weapons')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de armas</a>
                       <a href="#" onClick={() => router.push('/titles')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Títulos</a>
-                      {/* Añade aquí las subopciones de Estadísticas */}
                     </div>
                   </div>
                 </div>
@@ -47,6 +58,23 @@ export default function Navbar() {
                 <a href="#" onClick={() => router.push('/misc')} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Varios</a>
               </div>
             </div>
+          </div>
+          {/* Botón deslizante para alternar el tema */}
+          <div className="flex items-center">
+            <label className="relative inline-flex items-center cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={isDarkMode}
+                onChange={toggleTheme}
+                className="sr-only peer"
+                tabIndex={-1}
+              />
+              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:bg-blue-600 flex items-center justify-between px-1">
+                <span className="text-xs text-gray-500 dark:text-gray-300 pointer-events-none">🌙</span>
+                <span className="text-xs text-gray-500 dark:text-gray-300 pointer-events-none">🌞</span>
+              </div>
+              <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+            </label>
           </div>
         </div>
       </div>

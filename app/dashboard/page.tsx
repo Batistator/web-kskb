@@ -11,6 +11,7 @@ import moment from 'moment';
 import LoadingSpinner from '../components/Spinner';
 import { RangeValue } from "@heroui/react";
 import { DateValue, parseDate } from "@internationalized/date";
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState<any | null>(null);
@@ -19,6 +20,7 @@ export default function DashboardPage() {
   const [startDate, setStartDate] = useState<moment.Moment | null>(null);
   const [endDate, setEndDate] = useState<moment.Moment | null>(null);
   const router = useRouter();
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
 
   const fetchData = async (startDate: string, endDate: string) => {
     setIsLoading(true);
@@ -110,7 +112,6 @@ export default function DashboardPage() {
     }
   }, [startDate, endDate]);
 
-
   const handleDateRangeChange = (startDate: moment.Moment | null, endDate: moment.Moment | null) => {
     setStartDate(startDate);
     setEndDate(endDate);
@@ -123,7 +124,7 @@ export default function DashboardPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <div className="flex flex-col items-center">
             <LoadingSpinner />
             <p className="mt-4">Cargando datos del dashboard...</p>
@@ -137,7 +138,7 @@ export default function DashboardPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p className="text-red-500">Error al cargar el dashboard: {error}</p>
         </main>
       </div>
@@ -148,7 +149,7 @@ export default function DashboardPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p>No hay datos disponibles para el dashboard.</p>
         </main>
       </div>
@@ -158,7 +159,7 @@ export default function DashboardPage() {
   return (
     <div>
       <Navbar />
-      <main className="bg-gray-100 py-6">
+      <main className={`py-6 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-semibold text-gray-900">Resumen de partidas</h1>
@@ -169,14 +170,14 @@ export default function DashboardPage() {
             />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className={`shadow rounded-lg p-6 ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>
               <PieChart
                 victorias={dashboardData.wins}
                 derrotas={dashboardData.losses}
                 empates={dashboardData.ties}
               />
             </div>
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className={`shadow rounded-lg p-6 ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>
               <BarChart mapaData={dashboardData.resultsPerMap} />
             </div>
           </div>

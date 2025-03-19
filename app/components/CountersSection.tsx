@@ -1,10 +1,11 @@
-'use client'; // Marca el componente como Client Component para usar hooks
+'use client';
 
 import React from 'react';
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Divider, Link } from '@heroui/react';
-import {Image} from "@heroui/image";
-import {Avatar} from "@heroui/react";
+import { Image } from "@heroui/image";
+import { Avatar } from "@heroui/react";
+import { useTheme } from "../context/ThemeContext";
 
 interface CountersSectionProps {
   totalVictorias: number;
@@ -39,6 +40,8 @@ const CountersSection: React.FC<CountersSectionProps> = ({
   partidasNoShinchanPrimero,
   porcentajeNoShinchan,
 }) => {
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
+
   const formatMapName = (mapName: string) => {
     if (!mapName) return '';
     const modifiedName = mapName.slice(3); // Elimina los 3 primeros caracteres
@@ -49,50 +52,50 @@ const CountersSection: React.FC<CountersSectionProps> = ({
     {
       icon: "./icons/dashboard/flag-checkered-solid.svg",
       title: "Resumen de Partidas",
-      subtitle:"Total: " + (totalVictorias + totalDerrotas + totalEmpates),
+      subtitle: "Total: " + (totalVictorias + totalDerrotas + totalEmpates),
       value: [
-        { title: "Victorias", value: totalVictorias, color: "text-green-500", icon:"" },
-        { title: "Derrotas", value: totalDerrotas, color: "text-red-500", icon:"" },
-        { title: "Empates", value: totalEmpates, color: "text-yellow-500", icon:"" },
+        { title: "Victorias", value: totalVictorias, color: "text-green-500", icon: "" },
+        { title: "Derrotas", value: totalDerrotas, color: "text-red-500", icon: "" },
+        { title: "Empates", value: totalEmpates, color: "text-yellow-500", icon: "" },
       ],
     },
     {
       icon: "./icons/dashboard/map-solid.svg",
       title: "Mapas",
-      subtitle:"",
+      subtitle: "",
       value: [
-        { title: "Mapa Favorable", value: formatMapName(mapaFavorable), color: "text-green-500", icon:"./map/"+mapaFavorable+".png" },
-        { title: "Mapa Desfavorable", value: formatMapName(mapaDesfavorable), color: "text-red-500", icon:"./map/"+mapaDesfavorable+".png" },
-        { title: "Mapa Favorito", value: formatMapName(mapaFavorito), color: "text-black", icon:"./map/"+mapaFavorito+".png" },
+        { title: "Mapa Favorable", value: formatMapName(mapaFavorable), color: "text-green-500", icon: "./map/" + mapaFavorable + ".png" },
+        { title: "Mapa Desfavorable", value: formatMapName(mapaDesfavorable), color: "text-red-500", icon: "./map/" + mapaDesfavorable + ".png" },
+        { title: "Mapa Favorito", value: formatMapName(mapaFavorito), color: "text-black", icon: "./map/" + mapaFavorito + ".png" },
       ],
     },
     {
       icon: "./icons/dashboard/calendar-days-solid.svg",
       title: "Días",
-      subtitle:"",
+      subtitle: "",
       value: [
-        { title: "Días Victoriosos", value: diasVictoriosos, color: "text-green-500", icon:"" },
-        { title: "Días de Empate", value: diasEmpate, color: "text-yellow-500", icon:"" },
-        { title: "Días de Derrotas", value: diasDerrotas, color: "text-red-500", icon:"" },
+        { title: "Días Victoriosos", value: diasVictoriosos, color: "text-green-500", icon: "" },
+        { title: "Días de Empate", value: diasEmpate, color: "text-yellow-500", icon: "" },
+        { title: "Días de Derrotas", value: diasDerrotas, color: "text-red-500", icon: "" },
       ],
     },
     {
       icon: "./icons/dashboard/medal-solid.svg",
       title: "Rachas",
-      subtitle:"",
+      subtitle: "",
       value: [
-        { title: "Máxima Racha Victorias", value: maximaRachaVictorias, color: "text-green-500", icon:"" },
-        { title: "Máxima Racha Derrotas", value: maximaRachaDerrotas, color: "text-red-500", icon:"" },
-        { title: "Racha Actual Victorias", value: rachaActualVictorias, color: "text-black", icon:"" },
+        { title: "Máxima Racha Victorias", value: maximaRachaVictorias, color: "text-green-500", icon: "" },
+        { title: "Máxima Racha Derrotas", value: maximaRachaDerrotas, color: "text-red-500", icon: "" },
+        { title: "Racha Actual Victorias", value: rachaActualVictorias, color: "text-black", icon: "" },
       ],
     },
     {
       icon: "./icons/dashboard/percent-solid.svg",
       title: "Otros",
-      subtitle:"",
+      subtitle: "",
       value: [
-        { title: "Partidas no Shinchan Primero", value: partidasNoShinchanPrimero, color: "text-black", icon:"" },
-        { title: "Porcentaje No Shinchan", value: `${porcentajeNoShinchan}%`, color: "black", icon:"" },
+        { title: "Partidas no Shinchan Primero", value: partidasNoShinchanPrimero, color: "text-black", icon: "" },
+        { title: "Porcentaje No Shinchan", value: `${porcentajeNoShinchan}%`, color: "black", icon: "" },
       ],
     },
   ];
@@ -121,8 +124,10 @@ interface CounterCardGroupProps {
 }
 
 const CounterCard: React.FC<CounterCardProps> = ({ icon, title, value, color }) => {
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
+
   return (
-    <div className="bg-white rounded-lg p-4 sm:p-6">
+    <div className={`rounded-lg p-4 sm:p-6 ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>
       <dt className="text-sm font-bold text-gray-500 truncate">{title}</dt>
       <div className="flex items-center">
         {icon && <Avatar size="md" src={icon} className="mr-2 " />}
@@ -133,8 +138,10 @@ const CounterCard: React.FC<CounterCardProps> = ({ icon, title, value, color }) 
 };
 
 const CounterCardGroup: React.FC<CounterCardGroupProps> = ({ icon, title, subtitle, value }) => {
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
+
   return (
-    <Card className="max-w-[400px]">
+    <Card className={`max-w-[400px] ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>
       <CardHeader className="flex gap-3">
         <Image
           alt="heroui logo"
@@ -142,6 +149,7 @@ const CounterCardGroup: React.FC<CounterCardGroupProps> = ({ icon, title, subtit
           radius="sm"
           src={icon}
           width={40}
+          className={isDarkMode ? "invert" : ""}
         />
         <div className="flex flex-col">
           <p className="text-md font-bold">{title}</p>
@@ -151,14 +159,11 @@ const CounterCardGroup: React.FC<CounterCardGroupProps> = ({ icon, title, subtit
       <Divider />
       <CardBody>
         {value.map((item, index) => (
-          <CounterCard key={index} icon={item.icon} title={item.title} value={item.value} color ={item.color} />
+          <CounterCard key={index} icon={item.icon} title={item.title} value={item.value} color={item.color} />
         ))}
       </CardBody>
     </Card>
   );
 };
-
-
-
 
 export default CountersSection;
