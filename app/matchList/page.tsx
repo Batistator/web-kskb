@@ -19,6 +19,7 @@ import {
 import LoadingSpinner from '../components/Spinner';
 import { DateValue, parseDate } from "@internationalized/date";
 import { RangeValue } from "@heroui/react";
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 export default function MatchListPage() {
   const [matchListData, setMatchListData] = useState<any | null>(null);
@@ -28,6 +29,7 @@ export default function MatchListPage() {
   const [endDate, setEndDate] = useState<moment.Moment | null>(null);
   const router = useRouter();
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: '', direction: 'ascending' });
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
 
   const formatMapName = (mapName: string) => {
     if (!mapName) return '';
@@ -166,7 +168,7 @@ export default function MatchListPage() {
       return (
         <div>
           <Navbar />
-          <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+          <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
             <div className="flex flex-col items-center">
             <LoadingSpinner />
             <p className="mt-4">Cargando datos de partidas...</p>
@@ -180,7 +182,7 @@ export default function MatchListPage() {
       return (
         <div>
           <Navbar />
-          <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+          <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
             <p className="text-red-500">Error al cargar lista de partidas: {error}</p>
           </main>
         </div>
@@ -191,7 +193,7 @@ export default function MatchListPage() {
       return (
         <div>
           <Navbar />
-          <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+          <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
             <p>No hay datos disponibles de partidas.</p>
           </main>
         </div>
@@ -201,10 +203,10 @@ export default function MatchListPage() {
   return (
     <div>
       <Navbar />
-      <main className="bg-gray-100 py-6">
+      <main className={`py-6 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold text-gray-900">Lista de partidas</h1>
+          <h1 className={`text-2xl font-semibold ${isDarkMode ? "text-gray-200" : "text-gray-900"}`}>Lista de partidas</h1>
             <DateRangePicker
               onDateRangeChange={handleDateRangeChange}
               startDate={startDate}

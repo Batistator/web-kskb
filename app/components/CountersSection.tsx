@@ -66,7 +66,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
       value: [
         { title: "Mapa Favorable", value: formatMapName(mapaFavorable), color: "text-green-500", icon: "./map/" + mapaFavorable + ".png" },
         { title: "Mapa Desfavorable", value: formatMapName(mapaDesfavorable), color: "text-red-500", icon: "./map/" + mapaDesfavorable + ".png" },
-        { title: "Mapa Favorito", value: formatMapName(mapaFavorito), color: "text-black", icon: "./map/" + mapaFavorito + ".png" },
+        { title: "Mapa Favorito", value: formatMapName(mapaFavorito), color: "black", icon: "./map/" + mapaFavorito + ".png" },
       ],
     },
     {
@@ -86,7 +86,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
       value: [
         { title: "Máxima Racha Victorias", value: maximaRachaVictorias, color: "text-green-500", icon: "" },
         { title: "Máxima Racha Derrotas", value: maximaRachaDerrotas, color: "text-red-500", icon: "" },
-        { title: "Racha Actual Victorias", value: rachaActualVictorias, color: "text-black", icon: "" },
+        { title: "Racha Actual Victorias", value: rachaActualVictorias, color: "black", icon: "" },
       ],
     },
     {
@@ -94,7 +94,7 @@ const CountersSection: React.FC<CountersSectionProps> = ({
       title: "Otros",
       subtitle: "",
       value: [
-        { title: "Partidas no Shinchan Primero", value: partidasNoShinchanPrimero, color: "text-black", icon: "" },
+        { title: "Partidas no Shinchan Primero", value: partidasNoShinchanPrimero, color: "black", icon: "" },
         { title: "Porcentaje No Shinchan", value: `${porcentajeNoShinchan}%`, color: "black", icon: "" },
       ],
     },
@@ -128,7 +128,7 @@ const CounterCard: React.FC<CounterCardProps> = ({ icon, title, value, color }) 
 
   return (
     <div className={`rounded-lg p-4 sm:p-6 ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>
-      <dt className="text-sm font-bold text-gray-500 truncate">{title}</dt>
+      <dt className={`text-sm font-bold truncate ${isDarkMode ? "text-gray-300" : "text-gray-500"}`}>{title}</dt>
       <div className="flex items-center">
         {icon && <Avatar size="md" src={icon} className="mr-2 " />}
         <dd className={`mt-1 text-3xl font-semibold ${color}`}>{value}</dd>

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import LoadingSpinner from '../components/Spinner';
 import { DateValue, RangeValue } from '@heroui/react';
 import { parseDate } from '@internationalized/date';
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 interface Title {
   player: string;
@@ -25,6 +26,7 @@ export default function TitlesPage() {
   const [error, setError] = useState<string | null>(null);
   const [titlesData, setTitlesData] = useState<Title[]>([]);
   const router = useRouter();
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
 
   useEffect(() => {
     const storedValue = localStorage.getItem('dateRange');
@@ -140,7 +142,7 @@ export default function TitlesPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <div className="flex flex-col items-center">
             <LoadingSpinner />
             <p className="mt-4">Cargando datos de títulos...</p>
@@ -154,7 +156,7 @@ export default function TitlesPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p className="text-red-500">Error al cargar lista de títulos: {error}</p>
         </main>
       </div>
@@ -165,7 +167,7 @@ export default function TitlesPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p>No hay datos disponibles de títulos.</p>
         </main>
       </div>
@@ -186,10 +188,10 @@ export default function TitlesPage() {
   return (
     <div>
       <Navbar />
-      <main className="bg-gray-100 py-6">
+      <main className={`py-6 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold text-gray-900">Lista de Títulos</h1>
+          <h1 className={`text-2xl font-semibold ${isDarkMode ? "text-gray-200" : "text-gray-900"}`}>Lista de Títulos</h1>
             <DateRangePicker
               onDateRangeChange={handleDateRangeChange}
               startDate={startDate}
@@ -198,13 +200,13 @@ export default function TitlesPage() {
           </div>
 
           {/* Panel de contadores */}
-          <div className="bg-white shadow rounded-lg p-4 mb-4">
+          <div className={`shadow rounded-lg p-4 mb-4 ${isDarkMode ? "bg-gray-900" : "bg-white"}`}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               {Object.entries(playerTitleCounts).map(([player, count]) => {
                 const colorClass = `text-${playerColor(player)}`;
                 return (
                   <div key={player} className="flex flex-col items-center">
-                    <span className="text-lg font-semibold text-gray-900">{player}</span>
+                    <span className={`text-lg font-semibold ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>{player}</span>
                     <span className={`text-2xl font-bold ${colorClass}`}>{count}</span>
                   </div>
                 );

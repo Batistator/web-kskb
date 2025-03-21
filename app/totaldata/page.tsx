@@ -20,6 +20,7 @@ import Image from 'next/image';
 import LoadingSpinner from '../components/Spinner';
 import { RangeValue } from "@heroui/react";
 import { DateValue, parseDate } from "@internationalized/date";
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 export default function MatchListPage() {
   const [matchListData, setMatchListData] = useState<any | null>(null);
@@ -29,6 +30,7 @@ export default function MatchListPage() {
   const [endDate, setEndDate] = useState<moment.Moment | null>(null);
   const router = useRouter();
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: '', direction: 'ascending' });
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
 
   const fetchData = async (startDate: string, endDate: string) => {
     setIsLoading(true);
@@ -132,7 +134,7 @@ export default function MatchListPage() {
     return (
       <div>
       <Navbar />
-      <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+      <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
         <div className="flex flex-col items-center">
         <LoadingSpinner />
         <p className="mt-4">Cargando estadísticas...</p>
@@ -146,7 +148,7 @@ export default function MatchListPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p className="text-red-500">Error al cargar estadísticas: {error}</p>
         </main>
       </div>
@@ -157,7 +159,7 @@ export default function MatchListPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p>No hay datos disponibles de partidas.</p>
         </main>
       </div>
@@ -167,10 +169,10 @@ export default function MatchListPage() {
   return (
     <div>
       <Navbar />
-      <main className="bg-gray-100 py-6">
+      <main className={`py-6 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold text-gray-900">Estadísticas</h1>
+          <h1 className={`text-2xl font-semibold ${isDarkMode ? "text-gray-200" : "text-gray-900"}`}>Estadísticas</h1>
             <DateRangePicker
               onDateRangeChange={handleDateRangeChange}
               startDate={startDate}
@@ -190,32 +192,32 @@ export default function MatchListPage() {
               <TableColumn key="data">
                 &nbsp;
               </TableColumn>
-              <TableColumn key="shinchan" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.75) 50% 90%, rgba(104,163,229,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
+                <TableColumn key="shinchan" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.50) 50% 90%, rgba(104,163,229,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
                 ShinChan&nbsp;&nbsp;
-              </TableColumn>
-              <TableColumn key="kazama" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.75) 50% 90%, rgba(237,163,56,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
+                </TableColumn>
+              <TableColumn key="kazama" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.50) 50% 90%, rgba(237,163,56,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
                 Kazama&nbsp;&nbsp;
               </TableColumn>
-              <TableColumn key="nene" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.75) 50% 90%, rgba(230,241,61,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
+              <TableColumn key="nene" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.50) 50% 90%, rgba(230,241,61,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
                 Nene&nbsp;&nbsp;
               </TableColumn>
-              <TableColumn key="swagchan" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.75) 50% 90%, rgba(128,60,161,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
+              <TableColumn key="swagchan" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.50) 50% 90%, rgba(128,60,161,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
                 SwagChan&nbsp;&nbsp;
               </TableColumn>
-              <TableColumn key="mafios" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.75) 50% 90%, rgba(16,152,86,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
+              <TableColumn key="mafios" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.50) 50% 90%, rgba(16,152,86,0) 100%)', borderRadius: '16px', textAlign: 'right' }}>
                 The Mafios&nbsp;&nbsp;
               </TableColumn>
             </TableHeader>
             <TableBody items={matchListData}>
               {(item: any) => (
                 <TableRow key={getKeyValue(item, "data")}>
-                  <TableCell style={{ width: '150px' }}><Image src={item.icon || '/default-icon.png'} alt="icon" width={150} height={30} /></TableCell>
+                  <TableCell style={{ width: '150px' }}><Image className={isDarkMode ? "invert" : ""} src={item.icon || '/default-icon.png'} alt="icon" width={150} height={30} /></TableCell>
                   <TableCell>{item.data}</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.75) 50% 90%, rgba(104,163,229,0) 100%)', textAlign: 'right' }}>{item.shinchan}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.75) 50% 90%, rgba(237,163,56,0) 100%)', textAlign: 'right' }}>{item.kazama}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.75) 50% 90%, rgba(230,241,61,0) 100%)', textAlign: 'right' }}>{item.nene}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.75) 50% 90%, rgba(128,60,161,0) 100%)', textAlign: 'right' }}>{item.swagchan}&nbsp;&nbsp;</TableCell>
-                  <TableCell style={{ background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.75) 50% 90%, rgba(16,152,86,0) 100%)', textAlign: 'right' }}>{item.mafios}&nbsp;&nbsp;</TableCell>
+                  <TableCell style={{ background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.50) 50% 90%, rgba(104,163,229,0) 100%)', textAlign: 'right' }}>{item.shinchan}&nbsp;&nbsp;</TableCell>
+                  <TableCell style={{ background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.50) 50% 90%, rgba(237,163,56,0) 100%)', textAlign: 'right' }}>{item.kazama}&nbsp;&nbsp;</TableCell>
+                  <TableCell style={{ background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.50) 50% 90%, rgba(230,241,61,0) 100%)', textAlign: 'right' }}>{item.nene}&nbsp;&nbsp;</TableCell>
+                  <TableCell style={{ background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.50) 50% 90%, rgba(128,60,161,0) 100%)', textAlign: 'right' }}>{item.swagchan}&nbsp;&nbsp;</TableCell>
+                  <TableCell style={{ background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.50) 50% 90%, rgba(16,152,86,0) 100%)', textAlign: 'right' }}>{item.mafios}&nbsp;&nbsp;</TableCell>
                 </TableRow>
               )}
             </TableBody>

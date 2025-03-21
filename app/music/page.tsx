@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 // Lista de canciones (referenciadas estáticamente)
 const musicTracks = [
@@ -78,6 +79,7 @@ const AudioPlayer = ({ track }: { track: Track }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [audioReady, setAudioReady] = useState(false);
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
@@ -149,7 +151,7 @@ const AudioPlayer = ({ track }: { track: Track }) => {
   const isTrackAvailable = !!track.file;
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+    <div className={`${isDarkMode ? "bg-gray-900" : "bg-gray-100"} rounded-lg shadow-md p-4 mb-6`}>
       <div className="flex items-center">
         <div className="w-16 h-16 mr-4">
           <img 
@@ -215,18 +217,21 @@ const AudioPlayer = ({ track }: { track: Track }) => {
 };
 
 export default function MusicPage() {
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
   return (
     <div>
       <Navbar />
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6">Música del Squad</h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {musicTracks.map(track => (
-            <AudioPlayer key={track.id} track={track} />
-          ))}
+      <main className={`py-6 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
+        <div className="container mx-auto p-4">
+          <h1 className="text-3xl font-bold mb-6">Música del Squad</h1>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {musicTracks.map(track => (
+              <AudioPlayer key={track.id} track={track} />
+            ))}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -40,13 +40,14 @@ export default function Navbar() {
                     </svg>
                   </button>
                   {/* Dropdown oculto por defecto */}
-                  <div className="absolute hidden group-hover:block w-48 rounded-md shadow-lg bg-white z-10">
+                  
+                  <div className={`absolute hidden group-hover:block w-48 rounded-md shadow-lg z-10 ${isDarkMode ? "bg-gray-700" : "bg-white"}`}>
                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-button">
-                      <a href="#" onClick={() => router.push('/dashboard')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Resumen de partidas</a>
-                      <a href="#" onClick={() => router.push('/totaldata')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Estadísticas</a>
-                      <a href="#" onClick={() => router.push('/matchList')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de partidas</a>
-                      <a href="#" onClick={() => router.push('/weapons')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Lista de armas</a>
-                      <a href="#" onClick={() => router.push('/titles')} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Títulos</a>
+                      <a href="#" onClick={() => router.push('/dashboard')} className={`block px-4 py-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"} ${isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"}`} role="menuitem">Resumen de partidas</a>
+                      <a href="#" onClick={() => router.push('/totaldata')} className={`block px-4 py-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"} ${isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"}`} role="menuitem">Estadísticas</a>
+                      <a href="#" onClick={() => router.push('/matchList')} className={`block px-4 py-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"} ${isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"}`} role="menuitem">Lista de partidas</a>
+                      <a href="#" onClick={() => router.push('/weapons')} className={`block px-4 py-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"} ${isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"}`} role="menuitem">Lista de armas</a>
+                      <a href="#" onClick={() => router.push('/titles')} className={`block px-4 py-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"} ${isDarkMode ? "hover:bg-gray-800" : "hover:bg-gray-100"}`} role="menuitem">Títulos</a>
                     </div>
                   </div>
                 </div>

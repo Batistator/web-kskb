@@ -19,6 +19,7 @@ import Image from 'next/image';
 import LoadingSpinner from '../components/Spinner';
 import { RangeValue } from "@heroui/react";
 import { DateValue, parseDate } from "@internationalized/date";
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 export default function WeaponsPage() {
   const [weaponsData, setWeaponsData] = useState<any | null>(null);
@@ -29,6 +30,7 @@ export default function WeaponsPage() {
   const [counts, setCounts] = useState({ shinchan: 0, kazama: 0, nene: 0, swagchan: 0, mafios: 0 });
   const router = useRouter();
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: '', direction: 'ascending' });
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
 
   const fetchData = async (startDate: string, endDate: string) => {
     setIsLoading(true);
@@ -170,7 +172,7 @@ export default function WeaponsPage() {
     return (
       <div>
       <Navbar />
-      <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+      <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
         <div className="flex flex-col items-center">
         <LoadingSpinner />
         <p className="mt-4">Cargando contadores...</p>
@@ -184,7 +186,7 @@ export default function WeaponsPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p className="text-red-500">Error al cargar contadores: {error}</p>
         </main>
       </div>
@@ -195,7 +197,7 @@ export default function WeaponsPage() {
     return (
       <div>
         <Navbar />
-        <main className="bg-gray-100 py-6 flex justify-center items-center h-screen">
+        <main className={`py-6 flex justify-center items-center h-screen ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
           <p>No hay datos disponibles de armas.</p>
         </main>
       </div>
@@ -205,10 +207,10 @@ export default function WeaponsPage() {
   return (
     <div>
       <Navbar />
-      <main className="bg-gray-100 py-6">
+      <main className={`py-6 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold text-gray-900">Armas</h1>
+          <h1 className={`text-2xl font-semibold ${isDarkMode ? "text-gray-200" : "text-gray-900"}`}>Armas</h1>
             <DateRangePicker
               onDateRangeChange={handleDateRangeChange}
               startDate={startDate}
@@ -217,26 +219,27 @@ export default function WeaponsPage() {
           </div>
 
           {/* Panel de contadores */}
-          <div className="bg-white shadow rounded-lg p-4 mb-4">
+          
+          <div className={`shadow rounded-lg p-4 mb-4 ${isDarkMode ? "bg-gray-900" : "bg-white"}`}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <div className="flex flex-col items-center">
-                <span className="text-lg font-semibold text-gray-900">ShinChan</span>
+                <span className={`text-lg font-semibold ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>ShinChan</span>
                 <span className="text-2xl font-bold text-blue-600">{counts.shinchan}</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-lg font-semibold text-gray-900">Kazama</span>
+                <span className={`text-lg font-semibold ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>Kazama</span>
                 <span className="text-2xl font-bold text-yellow-600">{counts.kazama}</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-lg font-semibold text-gray-900">Nene</span>
+                <span className={`text-lg font-semibold ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>Nene</span>
                 <span className="text-2xl font-bold text-yellow-400">{counts.nene}</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-lg font-semibold text-gray-900">SwagChan</span>
+                <span className={`text-lg font-semibold ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>SwagChan</span>
                 <span className="text-2xl font-bold text-purple-600">{counts.swagchan}</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-lg font-semibold text-gray-900">The Mafios</span>
+                <span className={`text-lg font-semibold ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>The Mafios</span>
                 <span className="text-2xl font-bold text-green-600">{counts.mafios}</span>
               </div>
             </div>
@@ -256,19 +259,19 @@ export default function WeaponsPage() {
               <TableColumn key="weapon" allowsSorting>
                 Arma
               </TableColumn>
-              <TableColumn key="shinchan" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.75) 50% 90%, rgba(104,163,229,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
+              <TableColumn key="shinchan" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.5) 50% 90%, rgba(104,163,229,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
                 ShinChan&nbsp;&nbsp;
               </TableColumn>
-              <TableColumn key="kazama" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.75) 50% 90%, rgba(237,163,56,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
+              <TableColumn key="kazama" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.5) 50% 90%, rgba(237,163,56,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
                 Kazama&nbsp;&nbsp;
               </TableColumn>
-              <TableColumn key="nene" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.75) 50% 90%, rgba(230,241,61,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
+              <TableColumn key="nene" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.5) 50% 90%, rgba(230,241,61,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
                 Nene&nbsp;&nbsp;
               </TableColumn>
-              <TableColumn key="swagchan" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.75) 50% 90%, rgba(128,60,161,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
+              <TableColumn key="swagchan" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.5) 50% 90%, rgba(128,60,161,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
                 SwagChan&nbsp;&nbsp;
               </TableColumn>
-              <TableColumn key="mafios" style={{ color: '#262626', background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.75) 50% 90%, rgba(16,152,86,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
+              <TableColumn key="mafios" style={{ color: isDarkMode ? '#FFFFFF' : '#262626', background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.5) 50% 90%, rgba(16,152,86,0) 100%)', borderRadius: '16px', textAlign: 'right' }} allowsSorting>
                 The Mafios&nbsp;&nbsp;
               </TableColumn>
             </TableHeader>
@@ -277,15 +280,15 @@ export default function WeaponsPage() {
                 <TableRow key={getKeyValue(item, "weapon")}>
                     <TableCell style={{ width: '150px', height: '30px' }}>
                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Image src={item.icon || '/default-icon.png'} alt="icon" width={150} height={30} style={{ objectFit: 'contain', maxHeight: '30px' }} />
+                      <Image className={isDarkMode ? "invert" : ""} src={item.icon || '/default-icon.png'} alt="icon" width={150} height={30} style={{ objectFit: 'contain', maxHeight: '30px' }} />
                     </div>
                     </TableCell>
                     <TableCell style={{ maxWidth: '150px' }}>{item.weapon}</TableCell>
-                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.75) 50% 90%, rgba(104,163,229,0) 100%)', textAlign: 'right' }}>{item.shinchan}&nbsp;&nbsp;</TableCell>
-                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.75) 50% 90%, rgba(237,163,56,0) 100%)', textAlign: 'right' }}>{item.kazama}&nbsp;&nbsp;</TableCell>
-                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.75) 50% 90%, rgba(230,241,61,0) 100%)', textAlign: 'right' }}>{item.nene}&nbsp;&nbsp;</TableCell>
-                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.75) 50% 90%, rgba(128,60,161,0) 100%)', textAlign: 'right' }}>{item.swagchan}&nbsp;&nbsp;</TableCell>
-                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.75) 50% 90%, rgba(16,152,86,0) 100%)', textAlign: 'right' }}>{item.mafios}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(104,163,229,0) 0%, rgba(104,163,229,0.5) 50% 90%, rgba(104,163,229,0) 100%)', textAlign: 'right' }}>{item.shinchan}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(237,163,56,0) 0%, rgba(237,163,56,0.5) 50% 90%, rgba(237,163,56,0) 100%)', textAlign: 'right' }}>{item.kazama}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(230,241,61,0) 0%, rgba(230,241,61,0.5) 50% 90%, rgba(230,241,61,0) 100%)', textAlign: 'right' }}>{item.nene}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(128,60,161,0) 0%, rgba(128,60,161,0.5) 50% 90%, rgba(128,60,161,0) 100%)', textAlign: 'right' }}>{item.swagchan}&nbsp;&nbsp;</TableCell>
+                    <TableCell style={{ flex: 1, background: 'linear-gradient(to right, rgba(16,152,86,0) 0%, rgba(16,152,86,0.5) 50% 90%, rgba(16,152,86,0) 100%)', textAlign: 'right' }}>{item.mafios}&nbsp;&nbsp;</TableCell>
                 </TableRow>
               )}
             </TableBody>

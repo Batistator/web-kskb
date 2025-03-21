@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -11,6 +12,9 @@ interface PieChartProps {
 }
 
 export default function PieChart({ victorias, derrotas, empates }: PieChartProps) {
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
+  const textColor = isDarkMode ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)'; // Color según el modo
+
   const data = {
     labels: ['Victorias', 'Derrotas', 'Empates'],
     datasets: [
@@ -38,10 +42,14 @@ export default function PieChart({ victorias, derrotas, empates }: PieChartProps
     plugins: {
       legend: {
         position: 'bottom' as const, // Leyenda abajo
+        labels: {
+          color: textColor, // Color del texto de la leyenda
+        },
       },
       title: {
         display: true,
         text: 'Distribución de Resultados',
+        color: textColor, // Color del texto del título
       },
     },
   };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -18,7 +19,11 @@ export default function BarChart({ mapaData }: BarChartProps) {
     const modifiedName = mapName.slice(3); // Elimina los 3 primeros caracteres
     return modifiedName.charAt(0).toUpperCase() + modifiedName.slice(1); // Pone el primer carácter en mayúscula
   };
-  
+
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
+  const textColor = isDarkMode ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)'; // Color según el modo
+  const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'; // Color de las líneas de guía
+
   const labels = mapaData.map(data => formatMapName(data.mapName)); // Usa mapName para el nombre del mapa
 
   const data = {
@@ -48,10 +53,14 @@ export default function BarChart({ mapaData }: BarChartProps) {
     plugins: {
       legend: {
         position: 'bottom' as const,
+        labels: {
+          color: textColor, // Color del texto de la leyenda
+        },
       },
       title: {
         display: true,
         text: 'Resultados por Mapa',
+        color: textColor, // Color del texto del título
       },
     },
     scales: {
@@ -60,12 +69,26 @@ export default function BarChart({ mapaData }: BarChartProps) {
         title: {
           display: true,
           text: 'Número de Partidas',
+          color: textColor, // Color del texto del eje Y
+        },
+        ticks: {
+          color: textColor, // Color de las etiquetas del eje Y
+        },
+        grid: {
+          color: gridColor, // Color de las líneas de guía del eje Y
         },
       },
       x: {
         title: {
           display: true,
           text: 'Mapas',
+          color: textColor, // Color del texto del eje X
+        },
+        ticks: {
+          color: textColor, // Color de las etiquetas del eje X
+        },
+        grid: {
+          color: gridColor, // Color de las líneas de guía del eje X
         },
       },
     },

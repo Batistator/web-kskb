@@ -162,7 +162,7 @@ export default function DashboardPage() {
       <main className={`py-6 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold text-gray-900">Resumen de partidas</h1>
+            <h1 className={`text-2xl font-semibold ${isDarkMode ? "text-gray-200" : "text-gray-900"}`}>Resumen de partidas</h1>
             <DateRangePicker
               onDateRangeChange={handleDateRangeChange}
               startDate={startDate}
