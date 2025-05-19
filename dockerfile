@@ -13,8 +13,14 @@ ARG NEXT_PUBLIC_API_HOST
 ENV NEXT_PUBLIC_YOUTUBE_API_KEY=$NEXT_PUBLIC_YOUTUBE_API_KEY
 ENV NEXT_PUBLIC_API_HOST=$NEXT_PUBLIC_API_HOST
 
+# Crea el archivo .env.production con las variables
+RUN echo "NEXT_PUBLIC_YOUTUBE_API_KEY=$NEXT_PUBLIC_YOUTUBE_API_KEY" >> .env.production && \
+    echo "NEXT_PUBLIC_API_HOST=$NEXT_PUBLIC_API_HOST" >> .env.production
+
 # Instala las dependencias
 RUN npm install
+
+RUN printenv | grep NEXT_PUBLIC
 
 # Construye la aplicación Next.js
 RUN npm run build
