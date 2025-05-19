@@ -147,8 +147,8 @@ export default function LoginPage() {
 
   // Clean up timer on component unmount
   useEffect(() => {
-    console.log("Valor de NEXT_PUBLIC_API_HOST:", process.env.NEXT_PUBLIC_API_HOST);
     return () => {
+      console.log("Valor de NEXT_PUBLIC_API_HOST:", process.env.NEXT_PUBLIC_API_HOST);
       if (tooltipTimerRef.current) {
         clearTimeout(tooltipTimerRef.current);
       }
