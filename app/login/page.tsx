@@ -130,7 +130,7 @@ export default function LoginPage() {
 
   const handleForgotPasswordClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    
+    console.log("Valor de variable:", process.env.NEXT_PUBLIC_API_HOST);
     // Clear any existing timer
     if (tooltipTimerRef.current) {
       clearTimeout(tooltipTimerRef.current);
