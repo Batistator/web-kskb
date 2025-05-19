@@ -7,6 +7,12 @@ WORKDIR /app
 # Copia todo el código antes de instalar dependencias
 COPY . . 
 
+# Recoge por argumentos las variables de entorno y las settea como tales.
+ARG NEXT_PUBLIC_YOUTUBE_API_KEY
+ARG NEXT_PUBLIC_API_HOST
+ENV NEXT_PUBLIC_YOUTUBE_API_KEY=$NEXT_PUBLIC_YOUTUBE_API_KEY
+ENV NEXT_PUBLIC_API_HOST=$NEXT_PUBLIC_API_HOST
+
 # Instala las dependencias
 RUN npm install
 
