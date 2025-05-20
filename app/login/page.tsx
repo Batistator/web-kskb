@@ -285,7 +285,7 @@ export default function LoginPage() {
                 <form onSubmit={handleRegistration} className="mt-4 space-y-4">
                   <div>
                     <label htmlFor="registration-username" className="block text-sm font-medium text-gray-700">
-                      Nombre de usuario
+                      Nombre de kskbito
                     </label>
                     <input
                       id="registration-username"
