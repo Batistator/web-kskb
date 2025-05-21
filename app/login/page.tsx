@@ -174,7 +174,7 @@ export default function LoginPage() {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Nombre de usuario
+                  Nombre de bito
                 </label>
                 <div className="mt-1">
                   <input
