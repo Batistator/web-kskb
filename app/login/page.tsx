@@ -130,7 +130,6 @@ export default function LoginPage() {
 
   const handleForgotPasswordClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("Valor de variable:", process.env.NEXT_PUBLIC_API_HOST);
     // Clear any existing timer
     if (tooltipTimerRef.current) {
       clearTimeout(tooltipTimerRef.current);
@@ -148,7 +147,6 @@ export default function LoginPage() {
   // Clean up timer on component unmount
   useEffect(() => {
     return () => {
-      console.log("Valor de NEXT_PUBLIC_API_HOST:", process.env.NEXT_PUBLIC_API_HOST);
       if (tooltipTimerRef.current) {
         clearTimeout(tooltipTimerRef.current);
       }
@@ -174,7 +172,7 @@ export default function LoginPage() {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Nombre de bito2
+                  Nombre de usuario
                 </label>
                 <div className="mt-1">
                   <input
@@ -285,7 +283,7 @@ export default function LoginPage() {
                 <form onSubmit={handleRegistration} className="mt-4 space-y-4">
                   <div>
                     <label htmlFor="registration-username" className="block text-sm font-medium text-gray-700">
-                      Nombre de kskbito
+                      Nombre de usuario
                     </label>
                     <input
                       id="registration-username"
