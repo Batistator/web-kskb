@@ -45,10 +45,12 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
     range2023: ["2023-01-01", "2023-12-31"],
     range2024: ["2024-01-01", "2024-12-31"],
     range2025: ["2025-01-01", "2025-12-31"],
+    range2026: ["2026-01-01", "2026-12-31"],
     rangeLT: ["2023-09-01", "2023-09-27"],
     rangeT1: ["2023-09-28", "2025-01-26"],
     rangeT2: ["2025-01-26", "2025-07-14"],
-    rangeT3: ["2025-07-14", "2025-12-31"],
+    rangeT3: ["2025-07-14", "2026-01-19"],
+    rangeT4: ["2026-01-19", "2026-12-31"],
   };
 
   const labelsMap = {
@@ -56,10 +58,12 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
     range2023: "2023",
     range2024: "2024",
     range2025: "2025",
+    range2026: "2026",
     rangeLT: "Limited test",
     rangeT1: "Temporada 1",
     rangeT2: "Temporada 2",
     rangeT3: "Temporada 3",
+    rangeT4: "Temporada 4",
   };
 
   const descriptionsMap = {
@@ -67,10 +71,12 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
     range2023: "Rango del año 2023",
     range2024: "Rango del año 2024",
     range2025: "Rango del año 2025",
+    range2026: "Rango del año 2026",
     rangeLT: "Rango de fechas del Limited Test de CS2",
     rangeT1: "Rango de fechas de la temporada 1 de CS2",
     rangeT2: "Rango de fechas de la temporada 2 de CS2",
     rangeT3: "Rango de fechas de la temporada 3 de CS2",
+    rangeT4: "Rango de fechas de la temporada 4 de CS2",
   };
 
   // Función para determinar el label basado en las fechas seleccionadas
