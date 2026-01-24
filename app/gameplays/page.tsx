@@ -67,23 +67,6 @@ export default function GameplaysPage() {
   const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;//'YOUR_YOUTUBE_API_KEY';
 
   useEffect(() => {
-    const fetchComments = async (videoId: string): Promise<string[]> => {
-      try {
-        const response = await fetch(
-          `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${apiKey}&maxResults=5`
-        );
-    
-        if (!response.ok) {
-          throw new Error('Error al obtener comentarios');
-        }
-    
-        const data = await response.json();
-        return data.items.map((item: any) => item.snippet.topLevelComment.snippet.textDisplay);
-      } catch (error) {
-        console.error(`Error al obtener comentarios para el video ${videoId}:`, error);
-        return [];
-      }
-    };
     
     const fetchYouTubeVideos = async () => {
       setLoading(true);
@@ -106,14 +89,12 @@ export default function GameplaysPage() {
     
           const videosData: YouTubeVideo[] = await Promise.all(
             data.items.map(async (item: any) => {
-              const comments = await fetchComments(item.snippet.resourceId.videoId);
               return {
                 id: item.snippet.resourceId.videoId,
                 title: item.snippet.title,
                 publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString(),
                 thumbnail: item.snippet.thumbnails.medium.url || '/placeholder-image.jpg',
                 description: item.snippet.description,
-                comments, // Añadir los comentarios al video
               };
             })
           );
