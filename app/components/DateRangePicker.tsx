@@ -233,6 +233,9 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
             <DropdownItem key="range2025" description={descriptionsMap["range2025"]}>
               {labelsMap["range2025"]}
             </DropdownItem>
+            <DropdownItem key="range2026" description={descriptionsMap["range2026"]}>
+              {labelsMap["range2026"]}
+            </DropdownItem>
             <DropdownItem key="rangeLT" description={descriptionsMap["rangeLT"]}>
               {labelsMap["rangeLT"]}
             </DropdownItem>
@@ -244,6 +247,9 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
             </DropdownItem>
             <DropdownItem key="rangeT3" description={descriptionsMap["rangeT3"]}>
               {labelsMap["rangeT3"]}
+            </DropdownItem>
+            <DropdownItem key="rangeT4" description={descriptionsMap["rangeT4"]}>
+              {labelsMap["rangeT4"]}
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
