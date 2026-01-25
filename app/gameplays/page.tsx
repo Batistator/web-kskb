@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Image from 'next/image';
+import { useTheme } from '../context/ThemeContext'; // Importar el ThemeContext
 
 // Tipo para los videos de YouTube
 interface YouTubeVideo {
@@ -57,6 +58,7 @@ export default function GameplaysPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const { isDarkMode } = useTheme(); // Leer el estado global del tema
 
   // ID de la lista de reproducción (reemplaza con tu lista real)
   const playlistId = 'PLjrNMjANEPkMmLfwIn3c7YEjisD0NuKvs'; // Lista de reproducción KSKB
@@ -86,16 +88,21 @@ export default function GameplaysPage() {
           const data = await response.json();
           
           // Procesar los videos de esta página
-          const videosData: YouTubeVideo[] = data.items.map((item: { snippet: { resourceId: { videoId: any; }; title: any; publishedAt: string | number | Date; thumbnails: { medium: { url: any; }; }; description: any; }; }) => ({
+          const videosData: YouTubeVideo[] = data.items.map((item: any) => ({
             id: item.snippet.resourceId.videoId,
             title: item.snippet.title,
             publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString(),
-            thumbnail: item.snippet.thumbnails.medium.url || '/placeholder-image.jpg', // Imagen de respaldo
+            // Aquí está el cambio clave: usamos ?. y buscamos alternativas
+            thumbnail: 
+              item.snippet.thumbnails?.medium?.url || 
+              item.snippet.thumbnails?.default?.url || 
+              '/placeholder-image.jpg', 
             description: item.snippet.description
           }));
           
           // Añadir videos al array acumulativo
-          allVideos = [...allVideos, ...videosData];
+          const validVideos = videosData.filter(v => v.title !== 'Deleted video' && v.title !== 'Private video');
+          allVideos = [...allVideos, ...validVideos];
           
           // Verificar si hay más páginas
           nextPageToken = data.nextPageToken;
@@ -103,6 +110,7 @@ export default function GameplaysPage() {
         }
         
         console.log(`Total de videos recuperados: ${allVideos.length}`);
+        
         setVideos(allVideos);
         setFilteredVideos(allVideos);
       } catch (err) {
@@ -185,9 +193,9 @@ export default function GameplaysPage() {
         {/* Lista de videos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredVideos.map(video => (
-            <div 
+            <div    
               key={video.id} 
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+              className={`rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}
               onClick={() => setSelectedVideo(video.id)}
             >
               <div className="relative h-48">
@@ -197,13 +205,13 @@ export default function GameplaysPage() {
                   layout="fill"
                   objectFit="cover"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center">
+                <div className={`absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
                   <svg className="w-16 h-16 text-white opacity-80" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 0C4.477 0 0 4.477 0 10c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10zm3.536 10.535l-5 3A1 1 0 017 12.5v-6a1 1 0 011.536-.835l5 3a1 1 0 010 1.67z"/>
                   </svg>
                 </div>
               </div>
-              <div className="p-4">
+              <div className={`p-4 ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
                 <h3 className="font-bold text-lg mb-1 line-clamp-2">{video.title}</h3>
                 {/*<p className="text-sm text-gray-500">{video.publishedAt}</p>*/}
                 <p className="text-sm text-gray-500">{video.description}</p>

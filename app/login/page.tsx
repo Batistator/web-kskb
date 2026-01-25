@@ -180,7 +180,7 @@ export default function LoginPage() {
                     name="username"
                     type="text"
                     required
-                    className="appearance-none block w-full px-3 py-2 border text-gray-700 border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="bg-white appearance-none block w-full px-3 py-2 border text-gray-700 border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Tu nombre de usuario"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -198,7 +198,7 @@ export default function LoginPage() {
                     name="password"
                     type="password"
                     required
-                    className="appearance-none block w-full px-3 text-gray-700 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="bg-white appearance-none block w-full px-3 text-gray-700 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     placeholder="Tu contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
