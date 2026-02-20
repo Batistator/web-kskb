@@ -86,6 +86,78 @@ export default function MatchListPage() {
     }
   };
 
+  const DownloadButton = ({ 
+    fileName, 
+    onDownload, 
+    isDownloading 
+  }: { 
+    fileName: string, 
+    onDownload: (name: string) => void, 
+    isDownloading: boolean 
+  }) => {
+    return (
+      <Button 
+        isIconOnly 
+        size="sm" 
+        variant="flat" 
+        color="primary"
+        isLoading={isDownloading}
+        onPress={() => onDownload(fileName)}
+      >
+        {!isDownloading && "⬇️"}
+      </Button>
+    );
+  };
+
+  const handleDownload = async (fileName: string, checksum: string) => {
+    // 1. Marcamos el ítem específico como cargando dentro de la lista
+    setMatchListData((prevData: any[]) =>
+      prevData.map((item) =>
+        item.checksum === checksum ? { ...item, isDownloading: true } : item
+      )
+    );
+    const token = localStorage.getItem('jwt_token');
+    const apiDemoDownloadUrl = `${process.env.NEXT_PUBLIC_API_HOST}api/matches/download/${fileName}`;
+    if (!token) {
+      setError('No se encontró token de autenticación.');
+      setIsLoading(false);
+      router.push('/login');
+      return;
+    }
+    
+    try {
+      const response = await fetch(apiDemoDownloadUrl, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error("No se pudo descargar el archivo");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      setMatchListData((prevData: any[]) =>
+        prevData.map((item) =>
+          item.checksum === checksum ? { ...item, isDownloading: false } : item
+        )
+      );
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+    } catch (error) {
+      console.error("Error descargando el archivo:", error);
+      alert("Error al descargar el fichero de demo.");
+    } 
+  };
+
   // Efecto para inicializar datos (simplificado para legibilidad)
   useEffect(() => {
     const storedValue = localStorage.getItem('dateRange');
@@ -151,8 +223,8 @@ export default function MatchListPage() {
               <TableColumn key="teamBScore" allowsSorting>Eq. B</TableColumn>
               <TableColumn key="result" allowsSorting>Resultado</TableColumn>
               <TableColumn key="overtime" allowsSorting>Prórroga</TableColumn>
-              {/* NUEVA COLUMNA */}
               <TableColumn key="chat" align="center">Chat</TableColumn>
+              <TableColumn key="download" align="center">Download</TableColumn>
             </TableHeader>
             <TableBody items={sortedItems}>
               {(item) => (
@@ -180,6 +252,23 @@ export default function MatchListPage() {
                         onPress={() => handleOpenChat(item.chatMessages)}
                       >
                         💬
+                      </Button>
+                    ) : (
+                      <span className="text-gray-400">-</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {item.demoFileName && item.demoFileName.trim().length > 0 ? (
+                      <Button 
+                        isIconOnly 
+                        size="sm" 
+                        variant="flat" 
+                        color="default"
+                        // Ahora leemos el estado del propio objeto 'item'
+                        isLoading={item.isDownloading} 
+                        onPress={() => handleDownload(item.demoFileName, item.checksum)}
+                      >
+                        {!item.isDownloading && "⬇️"}
                       </Button>
                     ) : (
                       <span className="text-gray-400">-</span>
