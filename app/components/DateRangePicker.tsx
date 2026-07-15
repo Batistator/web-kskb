@@ -50,7 +50,8 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
     rangeT1: ["2023-09-28", "2025-01-26"],
     rangeT2: ["2025-01-26", "2025-07-14"],
     rangeT3: ["2025-07-14", "2026-01-19"],
-    rangeT4: ["2026-01-19", "2026-12-31"],
+    rangeT4: ["2026-01-19", "2026-07-05"],
+    rangeT5: ["2026-07-06", "2027-12-31"],
   };
 
   const labelsMap = {
@@ -64,6 +65,7 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
     rangeT2: "Temporada 2",
     rangeT3: "Temporada 3",
     rangeT4: "Temporada 4",
+    rangeT5: "Temporada 5",
   };
 
   const descriptionsMap = {
@@ -77,6 +79,7 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
     rangeT2: "Rango de fechas de la temporada 2 de CS2",
     rangeT3: "Rango de fechas de la temporada 3 de CS2",
     rangeT4: "Rango de fechas de la temporada 4 de CS2",
+    rangeT5: "Rango de fechas de la temporada 5 de CS2",
   };
 
   // Función para determinar el label basado en las fechas seleccionadas
@@ -250,6 +253,9 @@ export default function DateRangePickerComponent({ onDateRangeChange, startDate,
             </DropdownItem>
             <DropdownItem key="rangeT4" description={descriptionsMap["rangeT4"]}>
               {labelsMap["rangeT4"]}
+            </DropdownItem>
+            <DropdownItem key="rangeT5" description={descriptionsMap["rangeT5"]}>
+              {labelsMap["rangeT5"]}
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
